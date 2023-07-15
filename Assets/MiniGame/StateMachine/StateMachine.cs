@@ -21,6 +21,13 @@ namespace MiniGame.StateMachine
             _owner = null;
             _states = new Dictionary<Type, State>();
         }
+        
+        ~StateMachine()
+        {
+            _owner = null;
+            _states.Clear();
+            StateMachineModule.UnRegisterStateMachine(name, this);
+        }
 
         public State GetState(Type stateType)
         {
@@ -93,9 +100,11 @@ namespace MiniGame.StateMachine
             {
                 return null;
             }
-            
+
             var stateMachine = new StateMachine();
             stateMachine._owner = owner;
+            stateMachine.name = owner.GetType().Name + ".FSM";
+            
             foreach (var state in states)
             {
                 if (state == null)
@@ -111,6 +120,8 @@ namespace MiniGame.StateMachine
                 stateMachine._states.Add(type, state);
                 state.Init();
             }
+            
+            StateMachineModule.RegisterStateMachine(stateMachine.name, stateMachine);
             return stateMachine;
         }
     }

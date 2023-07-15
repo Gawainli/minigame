@@ -27,5 +27,13 @@
         {
             fsm = p;
         }
+
+        public void ChangeState<T>() where T : State
+        {
+            if (fsm != null)
+            {
+                fsm.ChangeState<T>();
+            }
+        }
     }
 }

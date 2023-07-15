@@ -3,9 +3,19 @@ using UnityEngine;
 
 namespace MiniGame.Base
 {
-    public abstract class GameModule
+    public class GameModule : MonoBehaviour
     {
-        public abstract void Update(float deltaTime, float unscaledDeltaTime);
-        public abstract void Shutdown();
+        public virtual void Tick(float deltaTime, float unscaledDeltaTime){}
+        public virtual void Shutdown(){}
+
+        protected virtual void Update()
+        {
+            Tick(Time.deltaTime, Time.unscaledDeltaTime);
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Shutdown();
+        }
     }
 }
