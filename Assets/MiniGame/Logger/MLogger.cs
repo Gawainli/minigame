@@ -2,7 +2,7 @@
 
 namespace MiniGame.Logger
 {
-    public static class Logger
+    public static class MLogger
     {
         public static void Info(string msg)
         {
@@ -13,6 +13,18 @@ namespace MiniGame.Logger
             else
             {
                 UnityEngine.Debug.Log(msg);
+            }
+        }
+        
+        public static void Assert(bool con, string msg)
+        {
+            if (MiniGameCore.ContainsModule<LogModule>())
+            {
+                MiniGameCore.GetModule<LogModule>().Assert(con, msg);
+            }
+            else
+            {
+                UnityEngine.Debug.Assert(con, msg);
             }
         }
         
@@ -33,6 +45,18 @@ namespace MiniGame.Logger
             if (MiniGameCore.ContainsModule<LogModule>())
             {
                 MiniGameCore.GetModule<LogModule>().Error(msg);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError(msg);
+            }
+        }
+        
+        public static void Exception(string msg)
+        {
+            if (MiniGameCore.ContainsModule<LogModule>())
+            {
+                MiniGameCore.GetModule<LogModule>().Exception(msg);
             }
             else
             {

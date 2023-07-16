@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using MiniGame.Base;
-using MiniGame.Logger;
 using UnityEngine;
+using MiniGame.Logger;
 
 public class MiniGameTest : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        MiniGameCore.GetModule<LogModule>().Info("Test Message");
-        MiniGameCore.GetModule<LogModule>().Warning("Test warning");
+        MLogger.Info("Test Info");
+        MLogger.Warning("Test Warning");
     }
 
     // Update is called once per frame
