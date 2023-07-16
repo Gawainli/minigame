@@ -27,20 +27,20 @@ namespace MiniGame.Logger
 
     public class LogModule : GameModule
     {
-        public LogLevel filterLevel = LogLevel.Info;
-        public OutputType outputType = OutputType.Editor;
+        public static LogLevel filterLevel = LogLevel.Info;
+        public static OutputType outputType = OutputType.Editor;
         
         public delegate void OnLogFunc(LogLevel type, string msg);
         public static event OnLogFunc OnLog;
 
-        private static StringBuilder stringBuilder = new StringBuilder();
+        private static StringBuilder stringBuilder = new StringBuilder(1024);
         
-        public void Info(string msg)
+        public static void Info(string msg)
         {
             InternalLog(LogLevel.Info, msg);
         }
         
-        public void Assert(bool condition, string msg = "")
+        public static void Assert(bool condition, string msg = "")
         {
             if (!condition)
             {
@@ -52,22 +52,22 @@ namespace MiniGame.Logger
             }
         }
 
-        public void Warning(string msg)
+        public static void Warning(string msg)
         {
             InternalLog(LogLevel.Warning, msg);
         }
 
-        public void Error(string msg)
+        public static void Error(string msg)
         {
             InternalLog(LogLevel.Error, msg);
         }
         
-        public void Exception(string msg)
+        public static void Exception(string msg)
         {
             InternalLog(LogLevel.Exception, msg);
         }
 
-        private void InternalLog(LogLevel type, string logString)
+        private static void InternalLog(LogLevel type, string logString)
         {
             if (outputType == OutputType.None)
             {
@@ -125,7 +125,7 @@ namespace MiniGame.Logger
             }
         }
 
-        private StringBuilder GetFormatString(LogLevel logLevel, string logString)
+        private static StringBuilder GetFormatString(LogLevel logLevel, string logString)
         {
             stringBuilder.Clear();
             switch (logLevel)
