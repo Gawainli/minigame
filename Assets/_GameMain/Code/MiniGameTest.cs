@@ -3,6 +3,10 @@ using Cysharp.Threading.Tasks;
 using MiniGame.Event;
 using UnityEngine;
 using MiniGame.Logger;
+using MiniGame.Module;
+using MiniGame.Resource;
+using MiniGame.StateMachine;
+using YooAsset;
 
 public class TestEvent : IEventMessage
 {
@@ -11,6 +15,23 @@ public class TestEvent : IEventMessage
 
 public class MiniGameTest : MonoBehaviour
 {
+    private void Awake()
+    {
+        ModuleCore.CreateModule<LogModule>();
+        ModuleCore.CreateModule<StateMachineModule>();
+        ModuleCore.CreateModule<EventModule>();
+
+        var resCfg = new ResModuleCfg
+        {
+            packageName = "DefaultPackage",
+            ePlayMode = EPlayMode.EditorSimulateMode,
+            hostServerIP = "http://localhost:8080",
+            appVersion = "v1.0"
+        };
+
+        ModuleCore.CreateModule<ResourceModule>(0, resCfg);
+    }
+
     // Start is called before the first frame update
     async void Start()
     {
