@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MiniGame.Base
 {
-    public class GameCore : MonoBehaviour
+    public class MiniGameCore : GameModule
     {
         private static readonly Dictionary<Type, GameModule> _modules = new Dictionary<Type, GameModule>();
 
@@ -19,14 +19,15 @@ namespace MiniGame.Base
             return null;
         }
 
-        public static void RegisterModule<T>(T module) where T : GameModule
+        public static void RegisterModule(Type type, GameModule module)
         {
             if (module == null)
             {
                 return;
             }
 
-            var type = typeof(T);
+            Debug.Log(type.FullName);
+            
             if (_modules.ContainsKey(type))
             {
                 return;

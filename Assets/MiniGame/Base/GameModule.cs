@@ -5,6 +5,11 @@ namespace MiniGame.Base
 {
     public class GameModule : MonoBehaviour
     {
+        protected virtual void Awake()
+        {
+            MiniGameCore.RegisterModule(this.GetType(), this);
+        }
+
         public virtual void Tick(float deltaTime, float unscaledDeltaTime){}
         public virtual void Shutdown(){}
 
