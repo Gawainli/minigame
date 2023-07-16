@@ -35,6 +35,7 @@ namespace MiniGame.StateMachine
         
         public override void Tick(float deltaTime, float unscaledDeltaTime)
         {
+            base.Tick(deltaTime, unscaledDeltaTime);
             foreach (var machines in StateMachineDict.Values)
             {
                 foreach (var machine in machines)
