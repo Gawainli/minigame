@@ -7,6 +7,12 @@ namespace MiniGame.Base
     public class MiniGameCore : GameModule
     {
         private static readonly Dictionary<Type, GameModule> _modules = new Dictionary<Type, GameModule>();
+        
+        public static bool ContainsModule<T>() where T : GameModule
+        {
+            var type = typeof(T);
+            return _modules.ContainsKey(type);
+        }
 
         public static T GetModule<T>() where T : GameModule
         {
@@ -15,7 +21,6 @@ namespace MiniGame.Base
             {
                 return _modules[type] as T;
             }
-
             return null;
         }
 
@@ -25,8 +30,6 @@ namespace MiniGame.Base
             {
                 return;
             }
-
-            Debug.Log(type.FullName);
             
             if (_modules.ContainsKey(type))
             {
