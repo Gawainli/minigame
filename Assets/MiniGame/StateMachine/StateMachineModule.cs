@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using MiniGame.Base;
+using MiniGame.Logger;
+using MiniGame.Module;
 
 namespace MiniGame.StateMachine
 {
-    public class StateMachineModule : GameModule
+    public class StateMachineModule : ModuleBase<StateMachineModule>, IModule
     {
         private static readonly Dictionary<string, List<StateMachine>> StateMachineDict = new Dictionary<string, List<StateMachine>>();
         
@@ -32,10 +34,14 @@ namespace MiniGame.StateMachine
                 machines.Remove(stateMachine);
             }
         }
-        
-        public override void Tick(float deltaTime, float unscaledDeltaTime)
+
+        public void Initialize(object userData = null)
         {
-            base.Tick(deltaTime, unscaledDeltaTime);
+            LogModule.Info("StateMachineModule Initialize");
+        }
+
+        public void Tick(float deltaTime, float unscaledDeltaTime)
+        {
             foreach (var machines in StateMachineDict.Values)
             {
                 foreach (var machine in machines)
@@ -45,9 +51,11 @@ namespace MiniGame.StateMachine
             }
         }
 
-        public override void Shutdown()
+        public void Shutdown()
         {
             StateMachineDict.Clear();
         }
+
+        public int Priority { get; set; }
     }
 }

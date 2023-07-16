@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using MiniGame.Base;
+using MiniGame.Logger;
+using MiniGame.Module;
 using UnityEngine;
 
 namespace MiniGame.Event
 {
-    public class EventModule : GameModule
+    public class EventModule : ModuleBase<EventModule>, IModule
     {
         private class PostWrapper
         {
@@ -101,10 +103,14 @@ namespace MiniGame.Event
             var eventId = msg.GetType().GetHashCode();
             PostEvent(eventId, msg);
         }
-        
-        public override void Tick(float deltaTime, float unscaledDeltaTime)
+
+        public void Initialize(object userData = null)
         {
-            base.Tick(deltaTime, unscaledDeltaTime);
+            LogModule.Info("EventModule Initialize");
+        }
+
+        public void Tick(float deltaTime, float unscaledDeltaTime)
+        {
             for (int i = PostList.Count - 1; i >=0; i--)
             {
                 var wrapper = PostList[i];
@@ -117,10 +123,11 @@ namespace MiniGame.Event
             }
         }
         
-        public override void Shutdown()
+        public void Shutdown()
         {
-            base.Shutdown();
             ClearALlListener();
         }
+
+        public int Priority { get; set; }
     }
 }

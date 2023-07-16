@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using MiniGame.Base;
+using MiniGame.Module;
 using MiniGame.Utils;
 
 namespace MiniGame.Logger
@@ -25,7 +26,7 @@ namespace MiniGame.Logger
         File = 0x4
     }
 
-    public class LogModule : GameModule
+    public class LogModule : ModuleBase<LogModule>, IModule
     {
         public static LogLevel filterLevel = LogLevel.Info;
         public static OutputType outputType = OutputType.Editor;
@@ -176,5 +177,20 @@ namespace MiniGame.Logger
 
             return stringBuilder;
         }
+
+        public void Initialize(object userData = null)
+        {
+            Info("LogModule Initialize");
+        }
+
+        public void Tick(float deltaTime, float unscaledDeltaTime)
+        {
+        }
+
+        public void Shutdown()
+        {
+        }
+
+        public int Priority { get; set; }
     }
 }
