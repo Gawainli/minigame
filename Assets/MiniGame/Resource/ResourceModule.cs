@@ -169,7 +169,7 @@ namespace MiniGame.Resource
             }
         }
         
-        public static async UniTask<Scene> LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             var op = YooAssets.LoadSceneAsync(path, loadSceneMode);
             await op.ToUniTask();
