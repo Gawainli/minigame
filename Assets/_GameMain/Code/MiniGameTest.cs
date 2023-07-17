@@ -6,6 +6,7 @@ using MiniGame.Logger;
 using MiniGame.Module;
 using MiniGame.Resource;
 using MiniGame.StateMachine;
+using UnityEngine.UI;
 using YooAsset;
 
 public class TestEvent : IEventMessage
@@ -15,21 +16,10 @@ public class TestEvent : IEventMessage
 
 public class MiniGameTest : MonoBehaviour
 {
+    public Image img;
     private void Awake()
     {
-        ModuleCore.CreateModule<LogModule>();
-        ModuleCore.CreateModule<StateMachineModule>();
-        ModuleCore.CreateModule<EventModule>();
 
-        var resCfg = new ResModuleCfg
-        {
-            packageName = "DefaultPackage",
-            ePlayMode = EPlayMode.EditorSimulateMode,
-            hostServerIP = "http://localhost:8080",
-            appVersion = "v1.0"
-        };
-
-        ModuleCore.CreateModule<ResourceModule>(0, resCfg);
     }
 
     // Start is called before the first frame update
@@ -41,6 +31,10 @@ public class MiniGameTest : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         EventModule.SendEvent(new TestEvent { message = "Test Event" });
+        var sp = ResourceModule.LoadAssetSync<Sprite>("Assets/_GameMain/Prefab/TestSprite.png");
+        img.sprite = sp;
+        img.SetNativeSize();
+
     }
 
     // Update is called once per frame

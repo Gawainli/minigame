@@ -29,14 +29,15 @@ namespace MiniGame.Resource
             else
                 return $"{hostServerIP}/CDN/PC/{appVersion}";
 #else
-		if (Application.platform == RuntimePlatform.Android)
-			return $"{hostServerIP}/CDN/Android/{appVersion}";
-		else if (Application.platform == RuntimePlatform.IPhonePlayer)
-			return $"{hostServerIP}/CDN/IPhone/{appVersion}";
-		else if (Application.platform == RuntimePlatform.WebGLPlayer)
-			return $"{hostServerIP}/CDN/WebGL/{appVersion}";
-		else
-			return $"{hostServerIP}/CDN/PC/{appVersion}";
+		// if (Application.platform == RuntimePlatform.Android)
+		// 	return $"{hostServerIP}/CDN/Android/{appVersion}";
+		// else if (Application.platform == RuntimePlatform.IPhonePlayer)
+		// 	return $"{hostServerIP}/CDN/IPhone/{appVersion}";
+		// else if (Application.platform == RuntimePlatform.WebGLPlayer)
+		// 	return $"{hostServerIP}/CDN/WebGL/{appVersion}";
+		// else
+		// 	return $"{hostServerIP}/CDN/PC/{appVersion}";
+            return "";
 #endif
         }
     }

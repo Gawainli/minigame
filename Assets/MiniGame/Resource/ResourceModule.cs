@@ -3,6 +3,7 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using MiniGame.Logger;
 using MiniGame.Module;
+using UnityEngine.SceneManagement;
 using YooAsset;
 
 namespace MiniGame.Resource
@@ -92,7 +93,7 @@ namespace MiniGame.Resource
 
         public int Priority { get; set; }
 
-        public async void InitPkgAsync()
+        public async UniTask InitPkgAsync()
         {
             // 编辑器下的模拟模式
             InitializationOperation initializationOperation = null;
@@ -136,6 +137,50 @@ namespace MiniGame.Resource
             else
             {
                 LogModule.Error($"{initializationOperation.Error}");
+            }
+        }
+
+        public static T LoadAssetSync<T>(string path) where T : UnityEngine.Object
+        {
+            var op = YooAssets.LoadAssetSync<T>(path);
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                return op.AssetObject as T;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+
+        public static async UniTask<T> LoadAssetAsync<T>(string path) where T : UnityEngine.Object
+        {
+            var op = YooAssets.LoadAssetAsync<T>(path);
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                return op.AssetObject as T;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+        
+        public static async UniTask<Scene> LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        {
+            var op = YooAssets.LoadSceneAsync(path, loadSceneMode);
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                return op.SceneObject;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return default;
             }
         }
     }

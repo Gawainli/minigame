@@ -28,6 +28,11 @@ namespace MiniGame.Module
                 return _instance;
             }
         }
-        
+
+        protected ModuleBase()
+        {
+            _instance = this as T;
+        }
+
     }
 }

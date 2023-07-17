@@ -10,7 +10,8 @@ namespace YooAsset.Editor
 		/// </summary>
 		public static string SimulateBuild(string packageName)
 		{
-			Debug.Log($"Begin to create simulate package : {packageName}");
+			YooLogger.Log($"Begin to create simulate package : {packageName}");
+			// Debug.Log($"Begin to create simulate package : {packageName}");
 			BuildParameters buildParameters = new BuildParameters();
 			buildParameters.StreamingAssetsRoot = AssetBundleBuilderHelper.GetDefaultStreamingAssetsRoot();
 			buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();

@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using MiniGame.Base;
 using MiniGame.Logger;
 using UnityEngine;
 
 namespace MiniGame.Module
 {
-    public class ModuleCore : MonoBehaviour
+    public class ModuleCore
     {
         private static readonly Dictionary<Type, IModule> ModulesDict = new Dictionary<Type, IModule>();
 
@@ -54,22 +53,20 @@ namespace MiniGame.Module
             }
         }
 
-        #region Mono
-        private void Update()
+        public static void TickAllModules(float deltaTime, float unscaledDeltaTime)
         {
             foreach (var module in ModulesDict.Values)
             {
-                module.Tick(Time.deltaTime, Time.unscaledDeltaTime);
+                module.Tick(deltaTime, unscaledDeltaTime);
             }
         }
 
-        private void OnDestroy()
+        public static void ShutdownAllModules()
         {
             foreach (var module in ModulesDict.Values)
             {
                 module.Shutdown();
             }
         }
-        #endregion
     }
 }
