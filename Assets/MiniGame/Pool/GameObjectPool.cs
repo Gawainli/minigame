@@ -18,34 +18,19 @@ namespace MiniGame.Pool
         private readonly float _destroyTime;
         private float _lastRestoreRealTime = -1f;
 
-
-
-        /// <summary>
-        /// 资源定位地址
-        /// </summary>
         public string AssetPath { private set; get; }
 
-        /// <summary>
-        /// 内部缓存总数
-        /// </summary>
         public int CacheCount
         {
             get { return _cacheObjects.Count; }
         }
 
-        /// <summary>
-        /// 外部使用总数
-        /// </summary>
         public int SpawnCount { private set; get; } = 0;
 
-        /// <summary>
-        /// 是否常驻不销毁
-        /// </summary>
         public bool DontDestroy
         {
             get { return _dontDestroy; }
         }
-
 
         public GameObjectPool(GameObject poolingRoot, string assetPath, bool dontDestroy, int initCapacity,
             int maxCapacity, float destroyTime)
@@ -59,20 +44,13 @@ namespace MiniGame.Pool
             _maxCapacity = maxCapacity;
             _destroyTime = destroyTime;
 
-            // 创建缓存池
             _cacheObjects = new Queue<GameObject>(initCapacity);
         }
 
-        /// <summary>
-        /// 创建对象池
-        /// </summary>
         public void CreatePoolSync(ResourcePackage package)
         {
-            // 加载游戏对象
-            // AssetHandle = package.LoadAssetSync<GameObject>(Location);
             _prefab = AssetModule.LoadAssetSync<GameObject>(AssetPath);
 
-            // 创建初始对象
             for (int i = 0; i < _initCapacity; i++)
             {
                 var go = Object.Instantiate(_prefab, _root.transform);
@@ -89,11 +67,8 @@ namespace MiniGame.Pool
                 return;
             }
 
-            // 加载游戏对象
             _prefab = await AssetModule.LoadAssetAsync<GameObject>(AssetPath);
 
-
-            // 创建初始对象
             for (int i = 0; i < _initCapacity; i++)
             {
                 var go = Object.Instantiate(_prefab, _root.transform);
@@ -102,21 +77,14 @@ namespace MiniGame.Pool
             }
         }
 
-        /// <summary>
-        /// 销毁游戏对象池
-        /// </summary>
         public void DestroyPool()
         {
-            // 销毁游戏对象
             Object.Destroy(_prefab);
             Object.Destroy(_root);
             _cacheObjects.Clear();
             SpawnCount = 0;
         }
 
-        /// <summary>
-        /// 查询静默时间内是否可以销毁
-        /// </summary>
         public bool CanAutoDestroy()
         {
             if (_dontDestroy)
@@ -130,9 +98,6 @@ namespace MiniGame.Pool
                 return false;
         }
 
-        /// <summary>
-        /// 回收
-        /// </summary>
         public void Restore(GameObject poolObj)
         {
             SpawnCount--;
@@ -151,9 +116,6 @@ namespace MiniGame.Pool
             }
         }
 
-        /// <summary>
-        /// 丢弃
-        /// </summary>
         public void Discard(GameObject poolObj)
         {
             SpawnCount--;
@@ -162,9 +124,6 @@ namespace MiniGame.Pool
             GameObject.Destroy(poolObj);
         }
 
-        /// <summary>
-        /// 获取一个游戏对象
-        /// </summary>
         public GameObject Spawn(Transform parent, Vector3 position, Quaternion rotation, bool forceClone,
             params System.Object[] userDates)
         {
