@@ -1,15 +1,14 @@
 ﻿using System;
 using MiniGame.Asset;
-using MiniGame.Base;
 using MiniGame.Event;
 using MiniGame.Logger;
+using MiniGame.Module;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using YooAsset;
 
-namespace MiniGame.Module
+namespace MiniGame.Base
 {
     public class GameEntry : MonoBehaviour, IModule
     {
