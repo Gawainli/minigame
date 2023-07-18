@@ -57,6 +57,10 @@ namespace MiniGame.Module
         {
             foreach (var module in ModulesDict.Values)
             {
+                if (!module.Initialized)
+                {
+                    continue;
+                }
                 module.Tick(deltaTime, unscaledDeltaTime);
             }
         }

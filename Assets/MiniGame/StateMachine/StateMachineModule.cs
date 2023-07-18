@@ -38,6 +38,7 @@ namespace MiniGame.StateMachine
         public void Initialize(object userData = null)
         {
             LogModule.Info("StateMachineModule Initialize");
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
@@ -57,5 +58,6 @@ namespace MiniGame.StateMachine
         }
 
         public int Priority { get; set; }
+        public bool Initialized { get; set; }
     }
 }

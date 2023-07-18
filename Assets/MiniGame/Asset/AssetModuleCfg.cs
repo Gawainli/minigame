@@ -1,8 +1,8 @@
 ﻿using YooAsset;
 
-namespace MiniGame.Resource
+namespace MiniGame.Asset
 {
-    public class ResModuleCfg
+    public class AssetModuleCfg
     {
         public string packageName;
         public EPlayMode ePlayMode;

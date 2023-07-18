@@ -1,10 +1,11 @@
 using System;
 using Cysharp.Threading.Tasks;
+using MiniGame.Asset;
 using MiniGame.Event;
 using UnityEngine;
 using MiniGame.Logger;
 using MiniGame.Module;
-using MiniGame.Resource;
+using MiniGame.Scene;
 using MiniGame.StateMachine;
 using UnityEngine.UI;
 using YooAsset;
@@ -31,9 +32,12 @@ public class MiniGameTest : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         EventModule.SendEvent(new TestEvent { message = "Test Event" });
-        var sp = ResourceModule.LoadAssetSync<Sprite>("Assets/_GameMain/Prefab/TestSprite.png");
+        var sp = AssetModule.LoadAssetSync<Sprite>("Assets/_GameMain/Prefab/TestSprite.png");
         img.sprite = sp;
         img.SetNativeSize();
+
+        await UniTask.Delay(TimeSpan.FromSeconds(5));
+        await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Main.unity");
 
     }
 

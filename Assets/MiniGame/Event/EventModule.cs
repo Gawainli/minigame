@@ -107,6 +107,7 @@ namespace MiniGame.Event
         public void Initialize(object userData = null)
         {
             LogModule.Info("EventModule Initialize");
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
@@ -129,5 +130,6 @@ namespace MiniGame.Event
         }
 
         public int Priority { get; set; }
+        public bool Initialized { get; set; }
     }
 }

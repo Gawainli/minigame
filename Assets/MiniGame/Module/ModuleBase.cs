@@ -11,6 +11,8 @@ namespace MiniGame.Module
         void Shutdown();
         
         int Priority { get; set; }
+        
+        bool Initialized { get; set; }
     }
 
     public class ModuleBase<T> where T : class, IModule

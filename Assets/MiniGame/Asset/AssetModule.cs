@@ -6,7 +6,7 @@ using MiniGame.Module;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
-namespace MiniGame.Resource
+namespace MiniGame.Asset
 {
     public class ResLogger : YooAsset.ILogger
     {
@@ -31,7 +31,7 @@ namespace MiniGame.Resource
         }
     }
     
-    public class ResourceModule : ModuleBase<ResourceModule>, IModule
+    public class AssetModule : ModuleBase<AssetModule>, IModule
     {
         private class GameDecryptionServices : IDecryptionServices
         {
@@ -57,7 +57,7 @@ namespace MiniGame.Resource
             }
         }
         
-        public ResModuleCfg cfg;
+        public AssetModuleCfg cfg;
         private ResourcePackage _pkg;
         public void Initialize(object userData = null)
         {
@@ -67,7 +67,7 @@ namespace MiniGame.Resource
                 return;
             }
             
-            cfg = userData as ResModuleCfg;
+            cfg = userData as AssetModuleCfg;
             if (cfg == null || string.IsNullOrEmpty(cfg.packageName))
             {
                 LogModule.Error("ResourceModule Initialize failed");
@@ -92,6 +92,7 @@ namespace MiniGame.Resource
         }
 
         public int Priority { get; set; }
+        public bool Initialized { get; set; }
 
         public async UniTask InitPkgAsync()
         {
@@ -119,7 +120,7 @@ namespace MiniGame.Resource
                 var createParameters = new HostPlayModeParameters();
                 createParameters.DecryptionServices = new GameDecryptionServices();
                 // createParameters.QueryServices = new GameQueryServices();
-                createParameters.RemoteServices = new ResRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
+                createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
                 initializationOperation = _pkg.InitializeAsync(createParameters);
             }
 
@@ -132,7 +133,8 @@ namespace MiniGame.Resource
             await initializationOperation.ToUniTask();
             if (initializationOperation.Status == EOperationStatus.Succeed)
             {
-                LogModule.Info("ResourceModule Initialize Succeed");
+                LogModule.Info("AssetModule Initialize Succeed");
+                Initialized = true;
             }
             else
             {

@@ -1,15 +1,42 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using MiniGame.Asset;
 using MiniGame.Module;
+using UnityEngine.SceneManagement;
 
 namespace MiniGame.Scene
 {
     public class SceneModule : IModule
     {
-        public static Stack<UnityEngine.SceneManagement.Scene> SceneStack = new Stack<UnityEngine.SceneManagement.Scene>();
+        private static readonly Stack<UnityEngine.SceneManagement.Scene> _sceneStack = new Stack<UnityEngine.SceneManagement.Scene>();
+        
+        public static async UniTask ChangeSceneAsync(string path)
+        {
+            await UnloadStackScene();
+            var scene = await AssetModule.LoadSceneAsync(path, LoadSceneMode.Additive);
+            _sceneStack.Push(scene);
+        }
+        
+        public static async UniTask UnloadStackScene()
+        {
+            // await UniTask.SwitchToMainThread();
+            if (_sceneStack.TryPop(out var curScene))
+            {
+                await UnloadSceneAsync(curScene);
+            }
+        }
+        
+        public static async UniTask UnloadSceneAsync(UnityEngine.SceneManagement.Scene scene)
+        {
+            // await UniTask.SwitchToMainThread();
+            await SceneManager.UnloadSceneAsync(scene);
+        }
+            
         
         
         public void Initialize(object userData = null)
         {
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
@@ -21,5 +48,6 @@ namespace MiniGame.Scene
         }
 
         public int Priority { get; set; }
+        public bool Initialized { get; set; }
     }
 }

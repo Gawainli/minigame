@@ -1,13 +1,13 @@
 ﻿using YooAsset;
 
-namespace MiniGame.Resource
+namespace MiniGame.Asset
 {
-    public class ResRemoteService : IRemoteServices
+    public class YooRemoteService : IRemoteServices
     {
         private readonly string _defaultHostServer;
         private readonly string _fallbackHostServer;
         
-        public ResRemoteService(string defaultHostServer, string fallbackHostServer)
+        public YooRemoteService(string defaultHostServer, string fallbackHostServer)
         {
             _defaultHostServer = defaultHostServer;
             _fallbackHostServer = fallbackHostServer;

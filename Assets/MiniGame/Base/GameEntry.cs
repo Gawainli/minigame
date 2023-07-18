@@ -1,8 +1,9 @@
 ﻿using System;
+using MiniGame.Asset;
 using MiniGame.Base;
 using MiniGame.Event;
 using MiniGame.Logger;
-using MiniGame.Resource;
+using MiniGame.Scene;
 using MiniGame.StateMachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,14 +24,16 @@ namespace MiniGame.Module
             ModuleCore.CreateModule<StateMachineModule>();
             ModuleCore.CreateModule<EventModule>();
 
-            var resCfg = new ResModuleCfg
+            var resCfg = new AssetModuleCfg
             {
                 packageName = packageName,
                 ePlayMode = resPlayMode,
                 hostServerIP = hostServerIP,
                 appVersion = appVersion
             };
-            ModuleCore.CreateModule<ResourceModule>(0, resCfg);
+            ModuleCore.CreateModule<AssetModule>(0, resCfg);
+            
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
@@ -44,12 +47,21 @@ namespace MiniGame.Module
         }
 
         public int Priority { get; set; } = 9999;
+        public bool Initialized { get; set; }
 
         #region Mono
-        private void Awake()
+        private async void Awake()
         {
             Initialize();
+            await AssetModule.Instance.InitPkgAsync(); 
+            await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Splash.unity");
         }
+
+        private async void Start()
+        {
+        }
+
+
         private void Update()
         {
             Tick(Time.deltaTime, Time.unscaledDeltaTime);

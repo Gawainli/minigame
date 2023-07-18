@@ -181,6 +181,7 @@ namespace MiniGame.Logger
         public void Initialize(object userData = null)
         {
             Info("LogModule Initialize");
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
@@ -192,5 +193,6 @@ namespace MiniGame.Logger
         }
 
         public int Priority { get; set; }
+        public bool Initialized { get; set; }
     }
 }
