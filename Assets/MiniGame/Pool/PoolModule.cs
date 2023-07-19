@@ -53,6 +53,11 @@ namespace MiniGame.Pool
             return pool;
         }
 
+        public static GameObject Spawn(string assetPath)
+        {
+            return Spawn(assetPath, Vector3.zero, Quaternion.identity);
+        }
+
         public static GameObject Spawn(string assetPath, Vector3 position, Quaternion rotation, bool forceClone = false,
             Transform parent = null, params System.Object[] userData)
         {

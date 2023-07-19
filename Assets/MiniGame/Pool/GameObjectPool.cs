@@ -124,6 +124,11 @@ namespace MiniGame.Pool
             GameObject.Destroy(poolObj);
         }
 
+        public GameObject Spawn()
+        {
+            return Spawn(null, Vector3.zero, Quaternion.identity, false, null);
+        }
+
         public GameObject Spawn(Transform parent, Vector3 position, Quaternion rotation, bool forceClone,
             params System.Object[] userDates)
         {
@@ -135,6 +140,7 @@ namespace MiniGame.Pool
 
             go.transform.position = position;
             go.transform.rotation = rotation;
+            go.transform.parent = parent;
             var poolObj = go.GetComponent<IPoolObj>();
             if (poolObj != null)
             {
