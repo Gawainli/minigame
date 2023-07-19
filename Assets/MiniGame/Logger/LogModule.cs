@@ -38,7 +38,7 @@ namespace MiniGame.Logger
         
         public static void Info(string msg)
         {
-            InternalLog(LogLevel.Info, msg);
+            Log(LogLevel.Info, msg);
         }
         
         public static void Assert(bool condition, string msg = "")
@@ -49,26 +49,26 @@ namespace MiniGame.Logger
                 {
                     msg = string.Format("{0}", "Assert Failed");
                 }
-                InternalLog(LogLevel.Assert, msg);
+                Log(LogLevel.Assert, msg);
             }
         }
 
         public static void Warning(string msg)
         {
-            InternalLog(LogLevel.Warning, msg);
+            Log(LogLevel.Warning, msg);
         }
 
         public static void Error(string msg)
         {
-            InternalLog(LogLevel.Error, msg);
+            Log(LogLevel.Error, msg);
         }
         
         public static void Exception(string msg)
         {
-            InternalLog(LogLevel.Exception, msg);
+            Log(LogLevel.Exception, msg);
         }
 
-        private static void InternalLog(LogLevel type, string logString)
+        private static void Log(LogLevel type, string logString)
         {
             if (outputType == OutputType.None)
             {
