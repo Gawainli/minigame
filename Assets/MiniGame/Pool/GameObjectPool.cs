@@ -130,7 +130,7 @@ namespace MiniGame.Pool
         }
 
         public GameObject Spawn(Transform parent, Vector3 position, Quaternion rotation, bool forceClone,
-            params System.Object[] userDates)
+            params System.Object[] userDatas)
         {
             GameObject go = null;
             if (forceClone == false && _cacheObjects.Count > 0)
@@ -144,7 +144,7 @@ namespace MiniGame.Pool
             var poolObj = go.GetComponent<IPoolObj>();
             if (poolObj != null)
             {
-                poolObj.Init(userDates);
+                poolObj.Init(userDatas);
             }
             SpawnCount++;
             return go;

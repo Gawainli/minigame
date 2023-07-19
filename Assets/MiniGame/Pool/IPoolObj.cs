@@ -2,7 +2,7 @@
 {
     public interface IPoolObj
     {
-        void Init(params System.Object[] userDates);
+        void Init(params System.Object[] userDatas);
         void Reset();
     }
 }
