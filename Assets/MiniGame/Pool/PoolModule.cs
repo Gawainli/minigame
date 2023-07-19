@@ -131,6 +131,7 @@ namespace MiniGame.Pool
             var cfg = userData as PoolModuleCfg;
             if (cfg == null)
             {
+                LogModule.Error("PoolModule.Initialize: cfg is null");
                 return;
             }
 

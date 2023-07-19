@@ -57,8 +57,8 @@ namespace MiniGame.Asset
             }
         }
         
-        public AssetModuleCfg cfg;
-        private ResourcePackage _pkg;
+        public static AssetModuleCfg cfg;
+        public static ResourcePackage Pkg;
         public void Initialize(object userData = null)
         {
             if (userData == null)
@@ -75,11 +75,11 @@ namespace MiniGame.Asset
             }
             
             YooAssets.Initialize(new ResLogger());
-            _pkg = YooAssets.TryGetPackage(cfg.packageName);
-            if (_pkg == null)
+            Pkg = YooAssets.TryGetPackage(cfg.packageName);
+            if (Pkg == null)
             {
-                _pkg = YooAssets.CreatePackage(cfg.packageName);
-                YooAssets.SetDefaultPackage(_pkg);
+                Pkg = YooAssets.CreatePackage(cfg.packageName);
+                YooAssets.SetDefaultPackage(Pkg);
             }
         }
 
@@ -94,7 +94,7 @@ namespace MiniGame.Asset
         public int Priority { get; set; }
         public bool Initialized { get; set; }
 
-        public async UniTask InitPkgAsync()
+        public static async UniTask InitPkgAsync()
         {
             // 编辑器下的模拟模式
             InitializationOperation initializationOperation = null;
@@ -102,14 +102,14 @@ namespace MiniGame.Asset
             {
                 var createParameters = new EditorSimulateModeParameters();
                 createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(cfg.packageName);
-                initializationOperation = _pkg.InitializeAsync(createParameters);
+                initializationOperation = Pkg.InitializeAsync(createParameters);
             }
             // 单机运行模式
             if (cfg.ePlayMode == EPlayMode.OfflinePlayMode)
             {
                 var createParameters = new OfflinePlayModeParameters();
                 createParameters.DecryptionServices = new GameDecryptionServices();
-                initializationOperation = _pkg.InitializeAsync(createParameters);
+                initializationOperation = Pkg.InitializeAsync(createParameters);
             }
 
             // 联机运行模式
@@ -121,7 +121,7 @@ namespace MiniGame.Asset
                 createParameters.DecryptionServices = new GameDecryptionServices();
                 // createParameters.QueryServices = new GameQueryServices();
                 createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
-                initializationOperation = _pkg.InitializeAsync(createParameters);
+                initializationOperation = Pkg.InitializeAsync(createParameters);
             }
 
             if (initializationOperation == null)
@@ -134,7 +134,7 @@ namespace MiniGame.Asset
             if (initializationOperation.Status == EOperationStatus.Succeed)
             {
                 LogModule.Info("AssetModule Initialize Succeed");
-                Initialized = true;
+                Instance.Initialized = true;
             }
             else
             {

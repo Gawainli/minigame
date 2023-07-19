@@ -3,6 +3,7 @@ using MiniGame.Asset;
 using MiniGame.Event;
 using MiniGame.Logger;
 using MiniGame.Module;
+using MiniGame.Pool;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
 using UnityEngine;
@@ -31,6 +32,11 @@ namespace MiniGame.Base
                 appVersion = appVersion
             };
             ModuleCore.CreateModule<AssetModule>(0, resCfg);
+            ModuleCore.CreateModule<PoolModule>(0, new PoolModuleCfg()
+            {
+                pkg = AssetModule.Pkg,
+                poolingRoot = gameObject
+            });
             
             Initialized = true;
         }
@@ -52,12 +58,13 @@ namespace MiniGame.Base
         private async void Awake()
         {
             Initialize();
-            await AssetModule.Instance.InitPkgAsync(); 
+            await AssetModule.InitPkgAsync(); 
             await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Splash.unity");
         }
 
-        private async void Start()
+        private void Start()
         {
+            
         }
 
 

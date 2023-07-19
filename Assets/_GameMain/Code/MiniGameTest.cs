@@ -5,6 +5,7 @@ using MiniGame.Event;
 using UnityEngine;
 using MiniGame.Logger;
 using MiniGame.Module;
+using MiniGame.Pool;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
 using UnityEngine.UI;
@@ -35,9 +36,11 @@ public class MiniGameTest : MonoBehaviour
         var sp = AssetModule.LoadAssetSync<Sprite>("Assets/_GameMain/Prefab/TestSprite.png");
         img.sprite = sp;
         img.SetNativeSize();
+        
+        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        await PoolModule.CreateGameObjectPoolAsync("Assets/_GameMain/Prefab/Cube.prefab");
+        var cube = PoolModule.Spawn("Assets/_GameMain/Prefab/Cube.prefab");
 
-        await UniTask.Delay(TimeSpan.FromSeconds(5));
-        await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Main.unity");
 
     }
 
