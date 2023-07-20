@@ -22,7 +22,8 @@ namespace MiniGame.UI
         
         public string WindowName { get; private set; }
         public int WindowLayer { get; private set; }
-        public int WindowId { get; private set; }
+        public bool Prepared { get; private set; }
+        public bool FullScreen { get; private set; }
         
         
         public int Depth
@@ -88,11 +89,11 @@ namespace MiniGame.UI
             }
         }
         
-        public void Init(string windowName, int windowId, System.Object[] userDatas)
+        public void Init(string windowName, int windowLayer, bool fullScreen)
         {
             WindowName = windowName;
-            WindowId = windowId;
-            _userDatas = userDatas;
+            WindowLayer = windowLayer;
+            FullScreen = fullScreen;
         }
         
         /// <summary>
@@ -166,6 +167,7 @@ namespace MiniGame.UI
             _uiGraphicRaycaster = _uiPanel.GetComponent<GraphicRaycaster>();
             _uiChildCanvas = _uiPanel.GetComponentsInChildren<Canvas>();
             _uiChildGraphicRaycaster = _uiPanel.GetComponentsInChildren<GraphicRaycaster>(); 
+            Prepared = true;
         }
         
         
@@ -178,12 +180,13 @@ namespace MiniGame.UI
             OnCreate();
         }
         
-        internal void Refresh()
+        internal void Refresh(params System.Object[] userDatas)
         {
             if (!_isCreate)
             {
                 return;
             }
+            _userDatas = userDatas;
             OnRefresh();
         }
         
