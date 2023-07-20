@@ -9,7 +9,7 @@ namespace MiniGame.Module
     {
         private static readonly Dictionary<Type, IModule> ModulesDict = new Dictionary<Type, IModule>();
 
-        public static T CreateModule<T>(int priority = 0, object userData = null) where T : class, IModule, new()
+        public static T CreateModule<T>(object userData = null, int priority = 0) where T : class, IModule, new()
         {
             var type = typeof(T);
             if (ModulesDict.ContainsKey(type))

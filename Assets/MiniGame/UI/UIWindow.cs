@@ -26,6 +26,10 @@ namespace MiniGame.UI
         public bool FullScreen { get; private set; }
         
         
+        protected UIWindow()
+        {
+        }
+        
         public int Depth
         {
             get => _uiCanvas != null ? _uiCanvas.sortingOrder : -999;
@@ -152,9 +156,9 @@ namespace MiniGame.UI
 
         private void InstantiatePanel(GameObject panelPrefab)
         {
-            _uiPanel = Object.Instantiate(panelPrefab);
+            _uiPanel = Object.Instantiate(panelPrefab, UIModule.UIRoot.transform, true);
             _uiPanel.transform.localPosition = Vector3.zero;
-            
+
             _uiCanvas = _uiPanel.GetComponent<Canvas>();
             if (_uiCanvas == null)
             {
@@ -175,8 +179,10 @@ namespace MiniGame.UI
         {
             if (_isCreate)
             {
+                
                 return;
             }
+            _isCreate = true;
             OnCreate();
         }
         

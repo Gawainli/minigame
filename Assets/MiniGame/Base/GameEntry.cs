@@ -6,6 +6,7 @@ using MiniGame.Module;
 using MiniGame.Pool;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
+using MiniGame.UI;
 using UnityEngine;
 using YooAsset;
 
@@ -17,6 +18,8 @@ namespace MiniGame.Base
         public string packageName = "DefaultPackage";
         public string hostServerIP = "http://localhost:8080";
         public string appVersion = "v1.0";
+
+        public GameObject uiRoot;
 
         public void Initialize(object userData = null)
         {
@@ -31,12 +34,14 @@ namespace MiniGame.Base
                 hostServerIP = hostServerIP,
                 appVersion = appVersion
             };
-            ModuleCore.CreateModule<AssetModule>(0, resCfg);
-            ModuleCore.CreateModule<PoolModule>(0, new PoolModuleCfg()
+            ModuleCore.CreateModule<AssetModule>(resCfg);
+            ModuleCore.CreateModule<PoolModule>(new PoolModuleCfg()
             {
                 pkg = AssetModule.Pkg,
                 poolingRoot = gameObject
             });
+
+            ModuleCore.CreateModule<UIModule>(uiRoot);
             
             Initialized = true;
         }

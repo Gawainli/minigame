@@ -8,6 +8,7 @@ using MiniGame.Module;
 using MiniGame.Pool;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
+using MiniGame.UI;
 using UnityEngine.UI;
 using YooAsset;
 
@@ -18,7 +19,6 @@ public class TestEvent : IEventMessage
 
 public class MiniGameTest : MonoBehaviour
 {
-    public Image img;
     private void Awake()
     {
 
@@ -33,14 +33,12 @@ public class MiniGameTest : MonoBehaviour
 
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         EventModule.SendEvent(new TestEvent { message = "Test Event" });
-        var sp = AssetModule.LoadAssetSync<Sprite>("Assets/_GameMain/Prefab/TestSprite.png");
-        img.sprite = sp;
-        img.SetNativeSize();
         
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         await PoolModule.CreateGameObjectPoolAsync("Assets/_GameMain/Prefab/Cube.prefab");
         var cube = PoolModule.Spawn("Assets/_GameMain/Prefab/Cube.prefab");
 
+        await UIModule.OpenWindowAsync<SampleTestMainWindow>("Assets/_GameMain/Prefab/SampleTestMainUI.prefab");
 
     }
 
