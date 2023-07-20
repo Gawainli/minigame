@@ -1,6 +1,7 @@
 ﻿    using MiniGame.Logger;
     using MiniGame.UI;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class TestUIDialog : UIWindow
     {
@@ -21,5 +22,6 @@
         public override void OnDestroy()
         {
             LogModule.Info("TestUIDialog OnDestroy");
+            GameObject.Destroy(Transform.GetComponent<Image>());
         }
     }

@@ -1,5 +1,7 @@
 ﻿    using MiniGame.Asset;
+    using MiniGame.Scene;
     using MiniGame.UI;
+    using UnityEngine;
     using YooAsset;
 
     public class SampleTestMainWindow : UIWindow
@@ -14,6 +16,9 @@
             
             btn = Transform.Find("BtnUnloadUnused").GetComponent<UnityEngine.UI.Button>();
             btn.onClick.AddListener(OnUnload);
+            
+            btn = Transform.Find("BtnLoadEmptyScene").GetComponent<UnityEngine.UI.Button>();
+            btn.onClick.AddListener(OnClickLoadEmptyScene);
         }
 
         public override void OnRefresh()
@@ -40,6 +45,13 @@
 
         private void OnUnload()
         {
+            AssetModule.UnloadUnusedAssets();
+            Resources.UnloadUnusedAssets();
+        }
+        
+        private async void OnClickLoadEmptyScene()
+        {
+            await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Main.unity");
         }
         
     }

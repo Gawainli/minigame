@@ -34,11 +34,11 @@ public class MiniGameTest : MonoBehaviour
         await UniTask.Delay(TimeSpan.FromSeconds(1));
         EventModule.SendEvent(new TestEvent { message = "Test Event" });
         
-        await UniTask.Delay(TimeSpan.FromSeconds(1));
+        // await UniTask.Delay(TimeSpan.FromSeconds(1));
         await PoolModule.CreateGameObjectPoolAsync("Assets/_GameMain/Prefab/Cube.prefab");
-        var cube = PoolModule.Spawn("Assets/_GameMain/Prefab/Cube.prefab");
+        PoolModule.Spawn("Assets/_GameMain/Prefab/Cube.prefab");
 
-        await UIModule.OpenWindowAsync<SampleTestMainWindow>("Assets/_GameMain/Prefab/SampleTestMainUI.prefab");
+        // await UIModule.OpenWindowAsync<SampleTestMainWindow>("Assets/_GameMain/Prefab/SampleTestMainUI.prefab");
 
     }
 

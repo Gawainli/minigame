@@ -185,5 +185,13 @@ namespace MiniGame.Asset
                 return default;
             }
         }
+
+        public static void UnloadUnusedAssets()
+        {
+            Pkg.UnloadUnusedAssets();
+            Pkg.ForceUnloadAllAssets();
+            GC.Collect();
+        }
+            
     }
 }

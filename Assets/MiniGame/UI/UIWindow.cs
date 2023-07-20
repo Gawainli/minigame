@@ -215,7 +215,7 @@ namespace MiniGame.UI
             if (_uiPanel != null)
             {
                 OnDestroy();
-                Object.Destroy(_uiPanel);
+                GameObject.Destroy(_uiPanel.gameObject);
                 _uiPanel = null;
             }
         }

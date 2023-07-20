@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa3236dd8d74962bacbd186c19f8123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resPlayMode: 0
+  resPlayMode: 1
   packageName: DefaultPackage
   hostServerIP: http://localhost:8080
   appVersion: v1.0

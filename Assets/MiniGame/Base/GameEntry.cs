@@ -65,6 +65,7 @@ namespace MiniGame.Base
             Initialize();
             await AssetModule.InitPkgAsync(); 
             await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Splash.unity");
+            // await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Main.unity");
         }
 
         private void Start()

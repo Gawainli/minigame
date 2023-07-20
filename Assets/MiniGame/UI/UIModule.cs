@@ -91,6 +91,7 @@ namespace MiniGame.UI
                 PopWindow(window);
                 SortWindowDepth(window.WindowLayer);
                 SetWindowVisible();
+                window = null;
             }
         }
 
