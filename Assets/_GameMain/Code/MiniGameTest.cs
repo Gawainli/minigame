@@ -38,7 +38,7 @@ public class MiniGameTest : MonoBehaviour
         await PoolModule.CreateGameObjectPoolAsync("Assets/_GameMain/Prefab/Cube.prefab");
         PoolModule.Spawn("Assets/_GameMain/Prefab/Cube.prefab");
 
-        // await UIModule.OpenWindowAsync<SampleTestMainWindow>("Assets/_GameMain/Prefab/SampleTestMainUI.prefab");
+        await UIModule.OpenWindowAsync<SampleTestMainWindow>("Assets/_GameMain/Prefab/SampleTestMainUI.prefab");
 
     }
 

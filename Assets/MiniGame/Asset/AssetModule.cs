@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using MiniGame.Logger;
@@ -171,6 +172,22 @@ namespace MiniGame.Asset
             }
         }
         
+        public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T> (string path, Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
+        {
+            var op = YooAssets.LoadAssetAsync<T>(path);
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                callback?.Invoke(op);
+                return op;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+        
         public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             var op = YooAssets.LoadSceneAsync(path, loadSceneMode);
@@ -185,11 +202,20 @@ namespace MiniGame.Asset
                 return default;
             }
         }
+        
+        public static void ReleaseAsset(int hashCode)
+        {
+            // if (assetOperationHandles.TryGetValue(hashCode, out var op))
+            // {
+            //     op.Release();
+            //     assetOperationHandles.Remove(hashCode);
+            // }
+        }
 
         public static void UnloadUnusedAssets()
         {
             Pkg.UnloadUnusedAssets();
-            Pkg.ForceUnloadAllAssets();
+            // Pkg.ForceUnloadAllAssets();
             GC.Collect();
         }
             
