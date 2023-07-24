@@ -4,6 +4,7 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using MiniGame.Logger;
 using MiniGame.Module;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using YooAsset;
 
@@ -163,7 +164,9 @@ namespace MiniGame.Asset
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
-                return op.AssetObject as T;
+                var asset = op.AssetObject as T;
+                op.Release();
+                return asset;
             }
             else
             {
@@ -172,6 +175,39 @@ namespace MiniGame.Asset
             }
         }
         
+        public static GameObject LoadGameObjectSync(string path, Transform transform = null)
+        {
+            var op = YooAssets.LoadAssetSync<GameObject>(path);
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                var go = op.InstantiateSync(transform);
+                op.Release();
+                return go;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+        
+        public static async UniTask<GameObject> LoadGameObjectAsync(string path, Transform transform = null)
+        {
+            var op = YooAssets.LoadAssetAsync<GameObject>(path);
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                var go = op.InstantiateSync(transform);
+                op.Release();
+                return go;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+
         public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T> (string path, Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
         {
             var op = YooAssets.LoadAssetAsync<T>(path);
