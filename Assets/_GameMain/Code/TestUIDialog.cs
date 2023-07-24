@@ -22,6 +22,5 @@
         public override void OnDestroy()
         {
             LogModule.Info("TestUIDialog OnDestroy");
-            GameObject.Destroy(Transform.GetComponent<Image>());
         }
     }

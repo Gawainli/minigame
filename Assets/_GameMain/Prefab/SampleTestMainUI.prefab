@@ -794,7 +794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4633699880170446227}
   - component: {fileID: 4633699880170446228}
-  - component: {fileID: 4633699880170446230}
+  - component: {fileID: 7850696440700180946}
   m_Layer: 5
   m_Name: SampleTestMainUI
   m_TagString: Untagged
@@ -809,10 +809,10 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4633699880170446231}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 489500588742684694}
   - {fileID: 4074010694413204753}
@@ -847,7 +847,7 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &4633699880170446230
+--- !u!114 &7850696440700180946
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

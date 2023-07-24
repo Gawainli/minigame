@@ -6,6 +6,7 @@
 
     public class SampleTestMainWindow : UIWindow
     {
+        private GameObject testSprite;
         public override void OnCreate()
         {
             var btn = Transform.Find("BtnOpenWindow").GetComponent<UnityEngine.UI.Button>();
@@ -46,7 +47,6 @@
         private void OnUnload()
         {
             AssetModule.UnloadUnusedAssets();
-            Resources.UnloadUnusedAssets();
         }
         
         private async void OnClickLoadEmptyScene()
