@@ -134,36 +134,30 @@ namespace MiniGame.UI
         public async UniTask LoadAsync(string assetPath, System.Object[] userDatas)
         {
             _userDatas = userDatas;
-            // var panelPrefab = await AssetModule.LoadAssetAsync<GameObject>(assetPath);
-            // if (panelPrefab == null)
-            // {
-                // LogModule.Error("UIWindow Load Error: panelPrefab is null. path: " + assetPath);
-                // return;
-            // }
-            var op = await AssetModule.LoadAssetAsyncOp<GameObject>(assetPath);
-            InstantiatePanel(op.AssetObject as GameObject);
-            op.Release();
+            var uiPrefab = await AssetModule.LoadAssetAsync<GameObject>(assetPath);
+            if (uiPrefab == null)
+            {
+                LogModule.Error("UIWindow Load Error: uiPrefab is null. path: " + assetPath);
+                return;
+            }
+            InstantiatePanel(uiPrefab);
         }
         
         public void LoadSync(string assetPath, System.Object[] userDatas)
         {
             _userDatas = userDatas;
-            var panelPrefab = AssetModule.LoadAssetSync<GameObject>(assetPath);
-            if (panelPrefab == null)
+            var uiPrefab = AssetModule.LoadAssetSync<GameObject>(assetPath);
+            if (uiPrefab == null)
             {
                 LogModule.Error("UIWindow Load Error: panelPrefab is null. path: " + assetPath);
                 return;
             }
-            InstantiatePanel(panelPrefab);
+            InstantiatePanel(uiPrefab);
         }
 
         private void InstantiatePanel(GameObject panelPrefab)
         {
-            _uiPanel = Object.Instantiate(panelPrefab, UIModule.UIRoot.transform, true);
-            _uiPanel.transform.localPosition = Vector3.zero;
-            _uiPanel.transform.localRotation = Quaternion.identity;
-            _uiPanel.transform.localScale = Vector3.one;
-
+            _uiPanel = Object.Instantiate(panelPrefab, UIModule.UIRoot.transform);
             _uiCanvas = _uiPanel.GetComponent<Canvas>();
             if (_uiCanvas == null)
             {
@@ -220,8 +214,7 @@ namespace MiniGame.UI
             if (_uiPanel != null)
             {
                 OnDestroy();
-                AssetModule.ReleaseAsset(_uiPanel.GetHashCode());
-                GameObject.Destroy(_uiPanel.gameObject);
+                Object.Destroy(_uiPanel);
                 _uiPanel = null;
             }
         }
