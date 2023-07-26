@@ -35,6 +35,9 @@ namespace MiniGame.Asset
     
     public class AssetModule : ModuleBase<AssetModule>, IModule
     {
+        public static AssetModuleCfg cfg;
+        public static ResourcePackage Pkg;
+        
         private class GameDecryptionServices : IDecryptionServices
         {
             public ulong LoadFromFileOffset(DecryptFileInfo fileInfo)
@@ -58,9 +61,7 @@ namespace MiniGame.Asset
                 return 1024;
             }
         }
-        
-        public static AssetModuleCfg cfg;
-        public static ResourcePackage Pkg;
+
         public void Initialize(object userData = null)
         {
             if (userData == null)
@@ -239,15 +240,6 @@ namespace MiniGame.Asset
             }
         }
         
-        public static void ReleaseAsset(int hashCode)
-        {
-            // if (assetOperationHandles.TryGetValue(hashCode, out var op))
-            // {
-            //     op.Release();
-            //     assetOperationHandles.Remove(hashCode);
-            // }
-        }
-
         public static void UnloadUnusedAssets()
         {
             Pkg.UnloadUnusedAssets();
