@@ -1,6 +1,6 @@
 ﻿namespace MiniGame.StateMachine
 {
-    public class State
+    public abstract class State
     {
         public float age;
         public float fixedAge;
@@ -8,10 +8,10 @@
         protected StateMachine fsm;
 
         public State(){}
-        
-        public virtual void Init(){}
-        public virtual void Enter(){}
-        public virtual void Exit(){}
+
+        public abstract void Init();
+        public abstract void Enter();
+        public abstract void Exit();
 
         public virtual void Tick(float delta)
         {

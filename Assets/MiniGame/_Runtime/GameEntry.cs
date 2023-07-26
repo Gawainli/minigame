@@ -10,7 +10,7 @@ using MiniGame.UI;
 using UnityEngine;
 using YooAsset;
 
-namespace MiniGame.Base
+namespace MiniGame.Runtime
 {
     public class GameEntry : MonoBehaviour, IModule
     {
@@ -20,9 +20,8 @@ namespace MiniGame.Base
         public string appVersion = "v1.0";
 
         public GameObject uiRoot;
-        
+
         private StateMachine.StateMachine _stateMachine;
-        
 
         public void Initialize(object userData = null)
         {
@@ -40,12 +39,23 @@ namespace MiniGame.Base
             ModuleCore.CreateModule<AssetModule>(resCfg);
             ModuleCore.CreateModule<PoolModule>(new PoolModuleCfg()
             {
-                pkg = AssetModule.Pkg,
+                pkg = AssetModule.pkg,
                 poolingRoot = gameObject
             });
             ModuleCore.CreateModule<UIModule>(uiRoot);
+
+            _stateMachine = StateMachineModule.Create<GameEntry>(this);
+            _stateMachine.AddState<StatePatchPrepare>();
+            _stateMachine.AddState<StateInitPackage>();
+            _stateMachine.AddState<StateUpdateVersion>();
+            _stateMachine.AddState<StateUpdateManifest>();
+            _stateMachine.AddState<StateCreateDownloader>();
+            _stateMachine.AddState<StateDownloadFile>();
+            _stateMachine.AddState<StateClearCache>();
+            _stateMachine.AddState<StatePatchDone>();
+            _stateMachine.AddState<StateStartGame>();
+            _stateMachine.AddState<StateLoadAssembly>();
             
-            _stateMachine = StateMachine.StateMachine.Create<GameEntry>(this, null);
             Initialized = true;
         }
 
@@ -63,26 +73,22 @@ namespace MiniGame.Base
         public bool Initialized { get; set; }
 
         #region Mono
-        private async void Awake()
+
+        private void Awake()
         {
             Initialize();
-            await AssetModule.InitPkgAsync(); 
-            await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Splash.unity");
-            // await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Main.unity");
         }
 
         private void Start()
         {
-            
+            _stateMachine.Start<StatePatchPrepare>();
         }
-
-
+        
         private void Update()
         {
             Tick(Time.deltaTime, Time.unscaledDeltaTime);
-        } 
+        }
 
         #endregion
-
     }
 }

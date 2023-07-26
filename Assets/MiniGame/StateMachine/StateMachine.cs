@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MiniGame.Logger;
 using UnityEngine;
 
 namespace MiniGame.StateMachine
@@ -16,9 +17,10 @@ namespace MiniGame.StateMachine
         private State _currentState;
         private State _lastState;
 
-        private StateMachine()
+        public StateMachine(object owner)
         {
-            _owner = null;
+            _owner = owner;
+            name = owner.GetType().Name + ".FSM";
             _states = new Dictionary<Type, State>();
         }
         
@@ -29,6 +31,21 @@ namespace MiniGame.StateMachine
             StateMachineModule.UnRegisterStateMachine(name, this);
         }
 
+        public void Start<T>() where T : State
+        {
+            _currentState = GetState(typeof(T));
+            _lastState = _currentState;
+            if (_currentState == null)
+            {
+                LogModule.Error("Start StateMachine Failed, State is Null");
+                return;
+            }
+
+            isRunning = true;
+            _currentState.SetParent(this);
+            _currentState.Enter();
+        }
+
         public State GetState(Type stateType)
         {
             if (stateType == null)
@@ -36,14 +53,40 @@ namespace MiniGame.StateMachine
                 return null;
             }
 
-            State state = null;
-            if (_states.TryGetValue(stateType, out state))
+            if (_states.TryGetValue(stateType, out var state))
             {
                 return state;
             }
             return null;
         }
 
+        public void AddState<T>() where T : State
+        {
+            var type = typeof(T);
+            var state = Activator.CreateInstance<T>();
+            if (state == null)
+            {
+                return;
+            }
+            AddState(state);
+        }
+        
+        
+        public void AddState(State state)
+{
+            if (state == null)
+            {
+                return;
+            }
+
+            if (_states.ContainsKey(state.GetType()))
+            {
+                return;
+            }
+
+            _states.Add(state.GetType(), state);
+            state.Init();
+        }
 
         public void Tick(float delta)
         {
@@ -92,37 +135,6 @@ namespace MiniGame.StateMachine
             _currentState = state;
             _currentState.SetParent(this);
             _currentState.Enter();
-        }
-        
-        public static StateMachine Create<T>(T owner, params State[] states) where T : class
-        {
-            if (owner == null)
-            {
-                return null;
-            }
-
-            var stateMachine = new StateMachine();
-            stateMachine._owner = owner;
-            stateMachine.name = owner.GetType().Name + ".FSM";
-            
-            foreach (var state in states)
-            {
-                if (state == null)
-                {
-                    continue;
-                }
-
-                var type = state.GetType();
-                if (stateMachine._states.ContainsKey(type))
-                {
-                    continue;
-                }
-                stateMachine._states.Add(type, state);
-                state.Init();
-            }
-            
-            StateMachineModule.RegisterStateMachine(stateMachine.name, stateMachine);
-            return stateMachine;
         }
     }
 }

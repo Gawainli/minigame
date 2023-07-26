@@ -9,6 +9,23 @@ namespace MiniGame.StateMachine
     {
         private static readonly Dictionary<string, List<StateMachine>> StateMachineDict = new Dictionary<string, List<StateMachine>>();
         
+        public static StateMachine Create<T>(T owner, params State[] states) where T : class
+        {
+            if (owner == null)
+            {
+                return null;
+            }
+
+            var stateMachine = new StateMachine(owner);
+            foreach (var state in states)
+            {
+                stateMachine.AddState(state);
+            }
+            
+            RegisterStateMachine(stateMachine.name, stateMachine);
+            return stateMachine;
+        }
+        
         public static List<StateMachine> GetStateMachine(string name)
         {
             if (StateMachineDict.TryGetValue(name, out var machines))

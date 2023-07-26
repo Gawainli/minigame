@@ -32,12 +32,17 @@ namespace MiniGame.Asset
             LogModule.Exception(exception.ToString());
         }
     }
-    
+
     public class AssetModule : ModuleBase<AssetModule>, IModule
     {
         public static AssetModuleCfg cfg;
-        public static ResourcePackage Pkg;
+        public static ResourcePackage pkg;
+        public static string packageVersion;
         
+        public static DownloaderOperation downloaderOperation;
+        public static int downloadingMaxNum = 10;
+        public static int failedTryAgain = 3;
+
         private class GameDecryptionServices : IDecryptionServices
         {
             public ulong LoadFromFileOffset(DecryptFileInfo fileInfo)
@@ -69,20 +74,20 @@ namespace MiniGame.Asset
                 LogModule.Error("ResourceModule Initialize failed");
                 return;
             }
-            
+
             cfg = userData as AssetModuleCfg;
             if (cfg == null || string.IsNullOrEmpty(cfg.packageName))
             {
                 LogModule.Error("ResourceModule Initialize failed");
                 return;
             }
-            
+
             YooAssets.Initialize(new ResLogger());
-            Pkg = YooAssets.TryGetPackage(cfg.packageName);
-            if (Pkg == null)
+            pkg = YooAssets.TryGetPackage(cfg.packageName);
+            if (pkg == null)
             {
-                Pkg = YooAssets.CreatePackage(cfg.packageName);
-                YooAssets.SetDefaultPackage(Pkg);
+                pkg = YooAssets.CreatePackage(cfg.packageName);
+                YooAssets.SetDefaultPackage(pkg);
             }
         }
 
@@ -97,7 +102,7 @@ namespace MiniGame.Asset
         public int Priority { get; set; }
         public bool Initialized { get; set; }
 
-        public static async UniTask InitPkgAsync()
+        public static async UniTask<bool> InitPkgAsync()
         {
             // 编辑器下的模拟模式
             InitializationOperation initializationOperation = null;
@@ -105,14 +110,15 @@ namespace MiniGame.Asset
             {
                 var createParameters = new EditorSimulateModeParameters();
                 createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(cfg.packageName);
-                initializationOperation = Pkg.InitializeAsync(createParameters);
+                initializationOperation = pkg.InitializeAsync(createParameters);
             }
+
             // 单机运行模式
             if (cfg.ePlayMode == EPlayMode.OfflinePlayMode)
             {
                 var createParameters = new OfflinePlayModeParameters();
                 createParameters.DecryptionServices = new GameDecryptionServices();
-                initializationOperation = Pkg.InitializeAsync(createParameters);
+                initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
             // 联机运行模式
@@ -124,13 +130,13 @@ namespace MiniGame.Asset
                 createParameters.DecryptionServices = new GameDecryptionServices();
                 // createParameters.QueryServices = new GameQueryServices();
                 createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
-                initializationOperation = Pkg.InitializeAsync(createParameters);
+                initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
             if (initializationOperation == null)
             {
                 LogModule.Error("ResourceModule Initialize failed");
-                return;
+                return false;
             }
 
             await initializationOperation.ToUniTask();
@@ -138,10 +144,65 @@ namespace MiniGame.Asset
             {
                 LogModule.Info("AssetModule Initialize Succeed");
                 Instance.Initialized = true;
+                return true;
             }
             else
             {
                 LogModule.Error($"{initializationOperation.Error}");
+                return false;
+            }
+        }
+
+        public static async UniTask<bool> GetStaticVersion()
+        {
+            var op = pkg.UpdatePackageVersionAsync();
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                LogModule.Info($"GetStaticVersion Succeed");
+                packageVersion = op.PackageVersion;
+                return true;
+            }
+            else
+            {
+                LogModule.Error($"{op.Error}");
+                return false;
+            }
+        }
+
+        public static async UniTask<bool> UpdateManifest()
+        {
+            var op = pkg.UpdatePackageManifestAsync(packageVersion, true);
+            await op.ToUniTask();
+            
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                LogModule.Info($"UpdateManifest Succeed");
+                return true;
+            }
+            else
+            {
+                LogModule.Error($"{op.Error}");
+                return false;
+            }
+        }
+
+        public static bool CreateDownloader()
+        {
+            var downloader = YooAssets.CreateResourceDownloader(downloadingMaxNum, failedTryAgain);
+            var totalDownloadCount = downloader.TotalDownloadCount;
+            var totalDownloadBytes = downloader.TotalDownloadBytes;
+
+            if (downloader.TotalDownloadCount == 0)
+            {
+                LogModule.Info("No files need to download");
+                return false;
+            }
+            else
+            {
+                LogModule.Info($"Found {totalDownloadCount} files need to download, total size is {totalDownloadBytes} bytes");
+                downloaderOperation = downloader;
+                return true;
             }
         }
 
@@ -175,7 +236,7 @@ namespace MiniGame.Asset
                 return null;
             }
         }
-        
+
         public static GameObject LoadGameObjectSync(string path, Transform transform = null)
         {
             var op = YooAssets.LoadAssetSync<GameObject>(path);
@@ -191,7 +252,7 @@ namespace MiniGame.Asset
                 return null;
             }
         }
-        
+
         public static async UniTask<GameObject> LoadGameObjectAsync(string path, Transform transform = null)
         {
             var op = YooAssets.LoadAssetAsync<GameObject>(path);
@@ -209,7 +270,8 @@ namespace MiniGame.Asset
             }
         }
 
-        public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T> (string path, Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
+        public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T>(string path,
+            Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
         {
             var op = YooAssets.LoadAssetAsync<T>(path);
             await op.ToUniTask();
@@ -224,8 +286,9 @@ namespace MiniGame.Asset
                 return null;
             }
         }
-        
-        public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+
+        public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path,
+            LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             var op = YooAssets.LoadSceneAsync(path, loadSceneMode);
             await op.ToUniTask();
@@ -239,12 +302,11 @@ namespace MiniGame.Asset
                 return default;
             }
         }
-        
+
         public static void UnloadUnusedAssets()
         {
-            Pkg.UnloadUnusedAssets();
+            pkg.UnloadUnusedAssets();
             GC.Collect();
         }
-            
     }
 }
