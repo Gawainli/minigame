@@ -20,6 +20,9 @@ namespace MiniGame.Base
         public string appVersion = "v1.0";
 
         public GameObject uiRoot;
+        
+        private StateMachine.StateMachine _stateMachine;
+        
 
         public void Initialize(object userData = null)
         {
@@ -40,9 +43,9 @@ namespace MiniGame.Base
                 pkg = AssetModule.Pkg,
                 poolingRoot = gameObject
             });
-
             ModuleCore.CreateModule<UIModule>(uiRoot);
             
+            _stateMachine = StateMachine.StateMachine.Create<GameEntry>(this, null);
             Initialized = true;
         }
 
