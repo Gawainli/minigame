@@ -23,4 +23,6 @@ namespace MiniGame.Asset
             return $"{_fallbackHostServer}/{fileName}";
         }
     }
+    
+    
 }

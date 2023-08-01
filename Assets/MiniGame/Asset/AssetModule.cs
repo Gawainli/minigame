@@ -128,7 +128,7 @@ namespace MiniGame.Asset
                 // string fallbackHostServer = GetHostServerURL();
                 var createParameters = new HostPlayModeParameters();
                 createParameters.DecryptionServices = new GameDecryptionServices();
-                // createParameters.QueryServices = new GameQueryServices();
+                createParameters.QueryServices = new GameQueryServices();
                 createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
@@ -159,7 +159,7 @@ namespace MiniGame.Asset
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
-                LogModule.Info($"GetStaticVersion Succeed");
+                LogModule.Info($"GetStaticVersion Succeed. version: {op.PackageVersion}");
                 packageVersion = op.PackageVersion;
                 return true;
             }
@@ -177,7 +177,7 @@ namespace MiniGame.Asset
             
             if (op.Status == EOperationStatus.Succeed)
             {
-                LogModule.Info($"UpdateManifest Succeed");
+                LogModule.Info($"UpdateManifest Succeed.");
                 return true;
             }
             else
