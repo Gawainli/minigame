@@ -11,7 +11,7 @@ namespace MiniGame.Runtime
 
         public override async void Enter()
         {
-            await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_TestMemory.unity");
+            await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_Start.unity");
         }
 
         public override void Exit()

@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resPlayMode: 2
   packageName: DefaultPackage
-  hostServerIP: http://192.168.30.100:1180
+  hostServerIP: http://localhost:1180
   appVersion: v1.0
   uiRoot: {fileID: 2041716206}
 --- !u!1 &2041716206
