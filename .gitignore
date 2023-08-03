@@ -74,3 +74,5 @@ Bundles
 Assets/StreamingAssets
 Assets/StreamingAssets.meta
 yoo
+Assets/HotUpdateDll
+HybridCLRData
