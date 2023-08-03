@@ -19,6 +19,10 @@ public class TestEvent : IEventMessage
 
 public class MiniGameTest : MonoBehaviour
 {
+    public static void LogInfo()
+    {
+        Debug.Log("Test");
+    }
     private void Awake()
     {
 

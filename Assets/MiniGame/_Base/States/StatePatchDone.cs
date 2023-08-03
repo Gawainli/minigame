@@ -1,6 +1,6 @@
 ﻿using MiniGame.StateMachine;
 
-namespace MiniGame.Runtime
+namespace MiniGame.Base
 {
     public class StatePatchDone : State
     {

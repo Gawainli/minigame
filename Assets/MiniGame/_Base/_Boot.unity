@@ -202,7 +202,7 @@ GameObject:
   - component: {fileID: 1099356312}
   - component: {fileID: 1099356313}
   m_Layer: 0
-  m_Name: GameEntry
+  m_Name: Boot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daa3236dd8d74962bacbd186c19f8123, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resPlayMode: 2
+  resPlayMode: 1
   packageName: DefaultPackage
   hostServerIP: http://localhost:1180
   appVersion: v1.0

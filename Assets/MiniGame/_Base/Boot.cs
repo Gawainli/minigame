@@ -10,9 +10,9 @@ using MiniGame.UI;
 using UnityEngine;
 using YooAsset;
 
-namespace MiniGame.Runtime
+namespace MiniGame.Base
 {
-    public class GameEntry : MonoBehaviour, IModule
+    public class Boot : MonoBehaviour, IModule
     {
         public EPlayMode resPlayMode = EPlayMode.EditorSimulateMode;
         public string packageName = "DefaultPackage";
@@ -44,7 +44,7 @@ namespace MiniGame.Runtime
             });
             ModuleCore.CreateModule<UIModule>(uiRoot);
 
-            _stateMachine = StateMachineModule.Create<GameEntry>(this);
+            _stateMachine = StateMachineModule.Create<Boot>(this);
             _stateMachine.AddState<StatePatchPrepare>();
             _stateMachine.AddState<StateInitPackage>();
             _stateMachine.AddState<StateUpdateVersion>();

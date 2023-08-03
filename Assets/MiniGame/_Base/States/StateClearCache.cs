@@ -2,7 +2,7 @@
 using MiniGame.Asset;
 using MiniGame.StateMachine;
 
-namespace MiniGame.Runtime
+namespace MiniGame.Base
 {
     public class StateClearCache : State
     {

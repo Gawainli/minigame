@@ -4,7 +4,7 @@ using MiniGame.Logger;
 using MiniGame.StateMachine;
 using YooAsset;
 
-namespace MiniGame.Runtime
+namespace MiniGame.Base
 {
     public class StateDownloadFile : State
     {

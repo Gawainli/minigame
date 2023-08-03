@@ -236,6 +236,39 @@ namespace MiniGame.Asset
                 return null;
             }
         }
+        
+        public static byte[] LoadRawFileSync(string path)
+        {
+            var op = YooAssets.LoadRawFileSync(path);
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                var bytes = op.GetRawFileData();
+                op.Release();
+                return bytes;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
+        
+        public static async UniTask<byte[]> LoadRawFileAsync(string path)
+        {
+            var op = YooAssets.LoadRawFileAsync(path);
+            await op.ToUniTask();
+            if (op.Status == EOperationStatus.Succeed)
+            {
+                var bytes = op.GetRawFileData();
+                op.Release();
+                return bytes;
+            }
+            else
+            {
+                LogModule.Error($"{op.LastError}");
+                return null;
+            }
+        }
 
         public static GameObject LoadGameObjectSync(string path, Transform transform = null)
         {

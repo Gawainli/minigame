@@ -1,9 +1,9 @@
 ﻿using MiniGame.Asset;
 using MiniGame.StateMachine;
 
-namespace MiniGame.Runtime
+namespace MiniGame.Base
 {
-    public class StateInitPackage : State
+    public class StateUpdateVersion : State
     {
         public override void Init()
         {
@@ -11,11 +11,12 @@ namespace MiniGame.Runtime
 
         public override async void Enter()
         {
-            var succeed = await AssetModule.InitPkgAsync();
+            var succeed = await AssetModule.GetStaticVersion();
             if (succeed)
             {
-                ChangeState<StateUpdateVersion>();
+                ChangeState<StateUpdateManifest>();
             }
+            
         }
 
         public override void Exit()
