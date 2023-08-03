@@ -1,40 +1,122 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
+using YooAsset.Editor;
 
 namespace MiniGame.Editor
 {
     public static class BuildTool 
     {
-        [MenuItem("Build Tool/Build All DLLs")]
-        public static void BuildAllDLLs()
+        private static readonly string _hotUpdateDllsPath = "Assets/HotUpdateDll";
+        
+        [MenuItem("Build Tool/Copy All AOT and HotUpdate DLLs")]
+        public static void CopyAllAOTAndHotUpdate()
         {
-            BuildHotUpdateDlls();
-            BuildAOTDlls();
+            CopyAllAotDLLs(EditorUserBuildSettings.activeBuildTarget);
+            CopyAllHotUpdateDLLs(EditorUserBuildSettings.activeBuildTarget);
+            AssetDatabase.Refresh();
         }
         
-        private static void BuildHotUpdateDlls()
-        {
-            
-        }
-        
-        private static void BuildAOTDlls()
-        {
-            
-        }
-        
-        [MenuItem("Build Tool/Build All Assets")]
-        public static void BuildAllAssets()
-        {
-            
-        }
-        
-        [MenuItem("Build Tool/BUild All")]
+                
+        [MenuItem("Build Tool/Build All (all hclr and all assets)")]
         public static void BuildAll()
         {
-            BuildAllDLLs();
-            BuildAllAssets();
+	        HybridCLR.Editor.Commands.PrebuildCommand.GenerateAll();
+	        CopyAllAOTAndHotUpdate();
+	        BuildYooAssets(EditorUserBuildSettings.activeBuildTarget);
         }
+
+        [MenuItem("Build Tool/Build Fast (hotupdate and incr assets)")]
+        public static void BuildAllIncremental()
+        {
+	        HybridCLR.Editor.Commands.CompileDllCommand.CompileDllActiveBuildTarget();
+	        CopyAllAOTAndHotUpdate();
+	        BuildYooAssets(EditorUserBuildSettings.activeBuildTarget, EBuildMode.IncrementalBuild);
+        }
+        
+        private static void CheckHotUpdateDllsPath()
+		{
+			var path = Path.Combine(HybridCLR.Editor.SettingsUtil.ProjectDir, _hotUpdateDllsPath);
+			if (!Directory.Exists(_hotUpdateDllsPath))
+			{
+				Directory.CreateDirectory(_hotUpdateDllsPath);
+			}
+		}
+        
+        private static void CopyAllAotDLLs(BuildTarget target)
+        {
+	        CheckHotUpdateDllsPath();
+            var aotDllsPath = HybridCLR.Editor.SettingsUtil.AssembliesPostIl2CppStripDir;
+            var projDir = HybridCLR.Editor.SettingsUtil.ProjectDir;
+            foreach (var aotName in HybridCLR.Editor.SettingsUtil.AOTAssemblyNames)
+            {
+                var srcPath = aotDllsPath + "/" + target.ToString() + "/" + aotName + ".dll";
+                var dstPath = _hotUpdateDllsPath + "/" + aotName + ".dll.bytes";
+                srcPath = Path.Combine(projDir, srcPath);
+                dstPath = Path.Combine(projDir, dstPath);
+                Debug.Log($"Copy Aot Dll {srcPath} to {dstPath}");
+                File.Copy(srcPath, dstPath, true);
+            }
+        }
+        
+        private static void CopyAllHotUpdateDLLs(BuildTarget target)
+        {
+	        CheckHotUpdateDllsPath();
+            var projDir = HybridCLR.Editor.SettingsUtil.ProjectDir;
+            var hotUpdateDllsPath = HybridCLR.Editor.SettingsUtil.GetHotUpdateDllsOutputDirByTarget(target);
+            foreach (var hotUpdateDllName in HybridCLR.Editor.SettingsUtil.HotUpdateAssemblyNamesIncludePreserved)
+            {
+                var srcPath = hotUpdateDllsPath + "/" + hotUpdateDllName + ".dll";
+                var dstPath = _hotUpdateDllsPath + "/" + hotUpdateDllName + ".dll.bytes";
+                srcPath = Path.Combine(projDir, srcPath);
+                dstPath = Path.Combine(projDir, dstPath);
+                Debug.Log($"Copy HotUpdate Dll {srcPath} to {dstPath}");
+                File.Copy(srcPath, dstPath, true);
+            }
+        }
+
+        private static void BuildYooAssets(BuildTarget target, EBuildMode buildMode = EBuildMode.ForceRebuild)
+        {
+            Debug.Log($"开始构建 : {target}");
+
+ 			BuildParameters buildParameters = new BuildParameters();
+			buildParameters.StreamingAssetsRoot = AssetBundleBuilderHelper.GetDefaultStreamingAssetsRoot();
+			buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+			buildParameters.BuildTarget = target;
+			buildParameters.BuildPipeline = AssetBundleBuilderSettingData.Setting.BuildPipeline;
+			buildParameters.BuildMode = buildMode;
+			buildParameters.PackageName = AssetBundleBuilderSettingData.Setting.BuildPackage;
+			buildParameters.PackageVersion = GetBuildPackageVersion();
+			buildParameters.VerifyBuildingResult = true;
+			buildParameters.SharedPackRule = new ZeroRedundancySharedPackRule();
+			// buildParameters.EncryptionServices = CreateEncryptionServicesInstance();
+			buildParameters.CompressOption = AssetBundleBuilderSettingData.Setting.CompressOption;
+			buildParameters.OutputNameStyle = AssetBundleBuilderSettingData.Setting.OutputNameStyle;
+			buildParameters.CopyBuildinFileOption = AssetBundleBuilderSettingData.Setting.CopyBuildinFileOption;
+			buildParameters.CopyBuildinFileTags = AssetBundleBuilderSettingData.Setting.CopyBuildinFileTags;
+
+			if (AssetBundleBuilderSettingData.Setting.BuildPipeline == EBuildPipeline.ScriptableBuildPipeline)
+			{
+				buildParameters.SBPParameters = new BuildParameters.SBPBuildParameters();
+				buildParameters.SBPParameters.WriteLinkXML = true;
+			}
+
+			var builder = new AssetBundleBuilder();
+			var buildResult = builder.Run(buildParameters);
+			if (buildResult.Success)
+			{
+				EditorUtility.RevealInFinder(buildResult.OutputPackageDirectory);
+			}
+        }
+        
+        private static string GetBuildPackageVersion()
+        {
+	        int totalMinutes = DateTime.Now.Hour * 60 + DateTime.Now.Minute;
+	        return DateTime.Now.ToString("yyyy-MM-dd") + "-" + totalMinutes;
+        }
+
     }
 }
