@@ -1,5 +1,6 @@
 ﻿using MiniGame.Asset;
 using MiniGame.StateMachine;
+using YooAsset;
 
 namespace MiniGame.Base
 {
@@ -14,7 +15,14 @@ namespace MiniGame.Base
             var succeed = await AssetModule.InitPkgAsync();
             if (succeed)
             {
-                ChangeState<StateUpdateVersion>();
+                if (SettingUtils.playMode == EPlayMode.EditorSimulateMode)
+                {
+                    ChangeState<StateStartGame>();
+                }
+                else
+                {
+                    ChangeState<StateUpdateVersion>();
+                }
             }
         }
 

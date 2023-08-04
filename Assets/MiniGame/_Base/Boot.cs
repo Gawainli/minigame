@@ -18,13 +18,14 @@ namespace MiniGame.Base
         public string packageName = "DefaultPackage";
         public string hostServerIP = "http://localhost:8080";
         public string appVersion = "v1.0";
-
         public GameObject uiRoot;
 
         private StateMachine.StateMachine _stateMachine;
 
         public void Initialize(object userData = null)
         {
+            SetSettings();
+            
             ModuleCore.CreateModule<LogModule>();
             ModuleCore.CreateModule<StateMachineModule>();
             ModuleCore.CreateModule<EventModule>();
@@ -57,6 +58,11 @@ namespace MiniGame.Base
             _stateMachine.AddState<StateLoadAssembly>();
             
             Initialized = true;
+        }
+
+        private void SetSettings()
+        {
+            SettingUtils.playMode = resPlayMode;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
