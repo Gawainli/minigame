@@ -1,15 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Cysharp.Threading.Tasks;
 using HybridCLR;
 using MiniGame.Asset;
-using MiniGame.Base;
 using MiniGame.Logger;
-using UnityEngine;
 
-public static class HotUpdateHelper
+public static class HotUpdateLoader
 {
     private static readonly List<string> _aotDllList = new List<string>()
     {
@@ -20,30 +16,29 @@ public static class HotUpdateHelper
 
     private static readonly List<string> _hotUpdateDllList = new List<string>()
     {
-        "Assets/HotUpdateDll/ADF_Base.dll.bytes",
         "Assets/HotUpdateDll/ADF_Logic.dll.bytes",
         "Assets/HotUpdateDll/ADF_Proto.dll.bytes",
         "Assets/HotUpdateDll/ADF_UI.dll.bytes",
     };
 
-    public static async UniTask<bool> LoadAllHotUpdate()
+    public static bool LoadAllHotUpdate()
     {
         LogModule.Info("Load All Hot Update 1111");
-        var ret = await LoadMetadataForAOTAssemblies();
+        var ret = LoadMetadataForAOTAssemblies();
         if (!ret)
         {
             return false;
         }
 
-        ret = await LoadHotUpdateDlls();
+        ret = LoadHotUpdateDlls();
         return ret;
     }
 
-    private static async UniTask<bool> LoadMetadataForAOTAssemblies()
+    public static bool LoadMetadataForAOTAssemblies()
     {
         foreach (var aotDllName in _aotDllList)
         {
-            var dllBytes = await AssetModule.LoadRawFileAsync(aotDllName);
+            var dllBytes = AssetModule.LoadRawFileSync(aotDllName);
             var err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             if (err != LoadImageErrorCode.OK)
             {
@@ -55,11 +50,11 @@ public static class HotUpdateHelper
         return true;
     }
 
-    private static async UniTask<bool> LoadHotUpdateDlls()
+    public static bool LoadHotUpdateDlls()
     {
         foreach (var hotDllName in _hotUpdateDllList)
         {
-            var dllBytes = await AssetModule.LoadRawFileAsync(hotDllName);
+            var dllBytes = AssetModule.LoadRawFileSync(hotDllName);
             if (dllBytes.Length == 0)
             {
                 LogModule.Error($"LoadHotUpdateDlls:{hotDllName}. ret: dllBytes.Length == 0");
