@@ -45,8 +45,8 @@ public static class HotUpdateLoader
                 LogModule.Error($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
                 return false;
             }
+            LogModule.Info($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
         }
-
         return true;
     }
 
@@ -70,6 +70,7 @@ public static class HotUpdateLoader
                 LogModule.Error($"LoadHotUpdateDlls:{hotDllName}. ret:{e.Message}");
                 return false;
             }
+            LogModule.Info($"LoadHotUpdateDlls:{hotDllName}. ret:OK");
         }
 
         LogModule.Info("Load All Hot Update Success");
