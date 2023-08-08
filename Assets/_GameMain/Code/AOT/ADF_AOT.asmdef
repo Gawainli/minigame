@@ -1,3 +1,18 @@
 {
-	"name": "AOT"
+    "name": "AOT",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4371e595cd9853a4b926dd797c961da4",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:e34a5702dd353724aa315fb8011f08c3"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
