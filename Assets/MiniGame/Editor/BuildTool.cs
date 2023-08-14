@@ -10,7 +10,7 @@ namespace MiniGame.Editor
 {
     public static class BuildTool 
     {
-        private static readonly string _hotUpdateDllsPath = "Assets/HotUpdateDll";
+        private static readonly string _hotUpdateDllsPath = "Assets/_GameMain/HotUpdateDll";
         
         [MenuItem("Build Tool/Copy All AOT and HotUpdate DLLs")]
         public static void CopyAllAOTAndHotUpdate()

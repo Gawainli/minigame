@@ -15,7 +15,7 @@ namespace MiniGame.Base
             var succeed = await AssetModule.InitPkgAsync();
             if (succeed)
             {
-                if (SettingUtils.playMode == EPlayMode.EditorSimulateMode)
+                if (SettingUtils.playMode == EPlayMode.EditorSimulateMode || SettingUtils.playMode == EPlayMode.OfflinePlayMode)
                 {
                     ChangeState<StateStartGame>();
                 }
