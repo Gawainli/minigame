@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace MiniGame.Event
 {
-    public class EventModule : ModuleBase<EventModule>, IModule
+    public class EventModule : IModule
     {
         private class PostWrapper
         {

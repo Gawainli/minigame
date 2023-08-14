@@ -26,7 +26,7 @@ namespace MiniGame.Logger
         File = 0x4
     }
 
-    public class LogModule : ModuleBase<LogModule>, IModule
+    public class LogModule : IModule
     {
         public static LogLevel filterLevel = LogLevel.Info;
         public static OutputType outputType = OutputType.Editor;

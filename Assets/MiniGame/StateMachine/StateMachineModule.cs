@@ -5,7 +5,7 @@ using MiniGame.Module;
 
 namespace MiniGame.StateMachine
 {
-    public class StateMachineModule : ModuleBase<StateMachineModule>, IModule
+    public class StateMachineModule : IModule
     {
         private static readonly Dictionary<string, List<StateMachine>> StateMachineDict = new Dictionary<string, List<StateMachine>>();
         

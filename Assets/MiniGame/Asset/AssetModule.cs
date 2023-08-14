@@ -33,7 +33,7 @@ namespace MiniGame.Asset
         }
     }
 
-    public class AssetModule : ModuleBase<AssetModule>, IModule
+    public class AssetModule : IModule
     {
         public static AssetModuleCfg cfg;
         public static ResourcePackage pkg;
@@ -102,7 +102,7 @@ namespace MiniGame.Asset
         public int Priority { get; set; }
         public bool Initialized { get; set; }
 
-        public static async UniTask<bool> InitPkgAsync()
+        public async UniTask<bool> InitPkgAsync()
         {
             // 编辑器下的模拟模式
             InitializationOperation initializationOperation = null;
@@ -143,7 +143,7 @@ namespace MiniGame.Asset
             if (initializationOperation.Status == EOperationStatus.Succeed)
             {
                 LogModule.Info("AssetModule Initialize Succeed");
-                Instance.Initialized = true;
+                Initialized = true;
                 return true;
             }
             else

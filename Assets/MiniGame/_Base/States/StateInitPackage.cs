@@ -1,4 +1,5 @@
 ﻿using MiniGame.Asset;
+using MiniGame.Module;
 using MiniGame.StateMachine;
 using YooAsset;
 
@@ -12,7 +13,8 @@ namespace MiniGame.Base
 
         public override async void Enter()
         {
-            var succeed = await AssetModule.InitPkgAsync();
+            var module = ModuleCore.GetModule<AssetModule>();
+            var succeed = await module.InitPkgAsync();
             if (succeed)
             {
                 if (SettingUtils.playMode == EPlayMode.EditorSimulateMode || SettingUtils.playMode == EPlayMode.OfflinePlayMode)
