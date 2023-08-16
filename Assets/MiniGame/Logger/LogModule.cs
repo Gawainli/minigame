@@ -82,20 +82,20 @@ namespace MiniGame.Logger
 
             StringBuilder infoBuilder = GetFormatString(type, logString);
 
-            //获取C#堆栈,Warning以上级别日志才获取堆栈
-            if (type == LogLevel.Error || type == LogLevel.Warning || type == LogLevel.Exception)
-            {
-                infoBuilder.AppendFormat("\n");
-                StackFrame[] stackFrames = new StackTrace().GetFrames();
-                for (int i = 0; i < stackFrames.Length; i++)
-                {
-                    StackFrame frame = stackFrames[i];
-                    string declaringTypeName = frame.GetMethod().DeclaringType.FullName;
-                    string methodName = stackFrames[i].GetMethod().Name;
-
-                    infoBuilder.AppendFormat("{0}::{1}\n", declaringTypeName, methodName);
-                }
-            }
+            // 获取C#堆栈,Warning以上级别日志才获取堆栈
+             if (type == LogLevel.Error || type == LogLevel.Warning || type == LogLevel.Exception)
+             {
+                 infoBuilder.AppendFormat("\n");
+                 StackFrame[] stackFrames = new StackTrace().GetFrames();
+                 for (int i = 0; i < stackFrames.Length; i++)
+                 {
+                     StackFrame frame = stackFrames[i];
+                     string declaringTypeName = frame.GetMethod().DeclaringType.FullName;
+                     string methodName = stackFrames[i].GetMethod().Name;
+            
+                     infoBuilder.AppendFormat("{0}::{1}\n", declaringTypeName, methodName);
+                 }
+             }
 
             string logStr = infoBuilder.ToString();
             
@@ -134,7 +134,7 @@ namespace MiniGame.Logger
                 case LogLevel.Success:
                 {
                     stringBuilder.AppendFormat(
-                        "<color=#0099bc><b>[TEngine] ► </b></color><color=gray><b>[INFO] ► </b></color>[{0}] - <color=#00FF18>{1}</color>",
+                        "<color=#0099bc><b>[MiniGame] ► </b></color><color=gray><b>[INFO] ► </b></color>[{0}] - <color=#00FF18>{1}</color>",
                         System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"), logString);
                 }
                     break;
@@ -161,16 +161,20 @@ namespace MiniGame.Logger
                     break;
                 case LogLevel.Error:
                 {
+                    logString = logString.Replace("<", "[");
+                    logString = logString.Replace(">", "]");
                     stringBuilder.AppendFormat(
                         "<color=#0099bc><b>[MiniGame] ► </b></color><color=red><b>[ERROR] ► </b></color>[{0}] - <color=red>{1}</color>",
-                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"), logString);
+                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"), logString.Replace("\0", ""));
                 }
                     break;
                 case LogLevel.Exception:
                 {
+                    logString = logString.Replace("<", "[");
+                    logString = logString.Replace(">", "]");
                     stringBuilder.AppendFormat(
                         "<color=#0099bc><b>[MiniGame] ► </b></color><color=red><b>[EXCEPTION] ► </b></color>[{0}] - <color=red>{1}</color>",
-                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"), logString);
+                        System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss fff"), logString.Replace("\0", ""));
                 }
                     break;
             }

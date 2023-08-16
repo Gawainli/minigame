@@ -1,22 +1,45 @@
-﻿using MiniGame.Module;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using MiniGame.Module;
 
 namespace MiniGame.Network
 {
     public class NetworkModule : IModule
     {
+        private static readonly List<TcpClient> tcpClients = new List<TcpClient>();
+        
+        public static TcpClient CreateTcpClient()
+        {
+            var tcpClient = new TcpClient(new DefaultPkgEncoder(), new DefaultPkgDecoder());
+            tcpClients.Add(tcpClient);
+            return tcpClient;
+        }
+        
         public void Initialize(object userData = null)
         {
-            throw new System.NotImplementedException();
+            Initialized = true;
         }
 
         public void Tick(float deltaTime, float unscaledDeltaTime)
         {
-            throw new System.NotImplementedException();
+            if (Initialized)
+            {
+                foreach (var client in tcpClients)
+                {
+                    client.Update(unscaledDeltaTime);
+                }
+            }
         }
 
         public void Shutdown()
         {
-            throw new System.NotImplementedException();
+            foreach (var client in tcpClients)
+            {
+                client.Dispose();
+            }
+            tcpClients.Clear();
+            Initialized = false;
         }
 
         public int Priority { get; set; }

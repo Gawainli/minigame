@@ -3,6 +3,7 @@ using MiniGame.Asset;
 using MiniGame.Event;
 using MiniGame.Logger;
 using MiniGame.Module;
+using MiniGame.Network;
 using MiniGame.Pool;
 using MiniGame.Scene;
 using MiniGame.StateMachine;
@@ -43,6 +44,7 @@ namespace MiniGame.Base
                 pkg = AssetModule.pkg,
                 poolingRoot = gameObject
             });
+            ModuleCore.CreateModule<NetworkModule>();
             ModuleCore.CreateModule<UIModule>(uiRoot);
 
             _stateMachine = StateMachineModule.Create<Boot>(this);

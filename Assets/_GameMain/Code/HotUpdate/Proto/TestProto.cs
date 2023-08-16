@@ -26,6 +26,7 @@ public class TestProto : MonoBehaviour
         var newPerson = ProtoBuf.Serializer.Deserialize<Person>(ms2);
         LogModule.Info("newPerson: " + newPerson.Name+ " " + newPerson.Age);
         ms2.Close();
+        
     }
 
     // Update is called once per frame
