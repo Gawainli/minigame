@@ -7,7 +7,6 @@ using UnityEngine;
 public class TestNetwork : MonoBehaviour
 {
     private TcpClient client;
-    private float interval = 0.0f;
     private byte[] pingBytes;
 
     private void Awake()

@@ -9,6 +9,8 @@ public class TestMainWindow : UIWindow
         btnMemTest.onClick.AddListener(OnClickMemTest);
         var btnLubanTest = Transform.Find("Panel/BtnLubanTest").GetComponent<UnityEngine.UI.Button>();
         btnLubanTest.onClick.AddListener(OnClickLubanTest);
+        var btnTestProto = Transform.Find("Panel/BtnProtoTest").GetComponent<UnityEngine.UI.Button>();
+        btnTestProto.onClick.AddListener(OnClickTestProto);
     }
 
     public override void OnRefresh()
@@ -32,6 +34,12 @@ public class TestMainWindow : UIWindow
     private async void OnClickLubanTest()
     {
         UIModule.CloseWindow<TestMainWindow>();
-        await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_LubanTest.unity");
+        await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_TestLuban.unity");
+    }
+    
+    private async void OnClickTestProto()
+    {
+        UIModule.CloseWindow<TestMainWindow>();
+        await SceneModule.ChangeSceneAsync("Assets/_GameMain/_Scenes/S_TestProto.unity");
     }
 }

@@ -545,7 +545,7 @@ GameObject:
   - component: {fileID: 644753082166451079}
   - component: {fileID: 1608879855335531524}
   m_Layer: 0
-  m_Name: 'BtnEventTest '
+  m_Name: BtnProtoTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -852,7 +852,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Event Test
+  m_text: 'Proto Test
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
