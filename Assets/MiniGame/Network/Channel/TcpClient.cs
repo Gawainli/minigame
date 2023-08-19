@@ -23,17 +23,7 @@ namespace MiniGame.Network
             this.decoder = decoder;
 
         }
-
-        public void Send(int msgId, byte[] bodyBytes)
-        {
-            var pkg = new DefaultNetPackage
-            {
-                MsgId = msgId,
-                BodyBytes = bodyBytes
-            };
-            channel?.SendPkg(pkg);
-        }
-
+        
         public void Send(INetPackage pkg)
         {
             channel?.SendPkg(pkg);

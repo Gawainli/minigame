@@ -173,6 +173,11 @@ namespace MiniGame.UI
             Prepared = true;
         }
         
+        protected Transform Find(string path)
+        {
+            return _uiPanel.transform.Find(path);
+        }
+        
         
         internal void Create()
         {

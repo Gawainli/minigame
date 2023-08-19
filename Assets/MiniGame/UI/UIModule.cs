@@ -5,7 +5,6 @@ using MiniGame.Logger;
 using MiniGame.Module;
 using UnityEngine;
 using UnityEngine.UI;
-using Object = System.Object;
 
 namespace MiniGame.UI
 {
