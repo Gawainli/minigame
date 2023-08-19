@@ -208,7 +208,7 @@ namespace MiniGame.Asset
 
         public static T LoadAssetSync<T>(string path) where T : UnityEngine.Object
         {
-            var op = YooAssets.LoadAssetSync<T>(path);
+            using var op = YooAssets.LoadAssetSync<T>(path);
             if (op.Status == EOperationStatus.Succeed)
             {
                 return op.AssetObject as T;
@@ -222,12 +222,11 @@ namespace MiniGame.Asset
 
         public static async UniTask<T> LoadAssetAsync<T>(string path) where T : UnityEngine.Object
         {
-            var op = YooAssets.LoadAssetAsync<T>(path);
+            using var op = YooAssets.LoadAssetAsync<T>(path);
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
                 var asset = op.AssetObject as T;
-                op.Release();
                 return asset;
             }
             else
@@ -239,11 +238,10 @@ namespace MiniGame.Asset
         
         public static byte[] LoadRawFileSync(string path)
         {
-            var op = YooAssets.LoadRawFileSync(path);
+            using var op = YooAssets.LoadRawFileSync(path);
             if (op.Status == EOperationStatus.Succeed)
             {
                 var bytes = op.GetRawFileData();
-                op.Release();
                 return bytes;
             }
             else
@@ -255,12 +253,11 @@ namespace MiniGame.Asset
         
         public static async UniTask<byte[]> LoadRawFileAsync(string path)
         {
-            var op = YooAssets.LoadRawFileAsync(path);
+            using var op = YooAssets.LoadRawFileAsync(path);
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
                 var bytes = op.GetRawFileData();
-                op.Release();
                 return bytes;
             }
             else
@@ -272,11 +269,10 @@ namespace MiniGame.Asset
         
         public static string LoadTextFileSync(string path)
         {
-            var op = YooAssets.LoadRawFileSync(path);
+            using var op = YooAssets.LoadRawFileSync(path);
             if (op.Status == EOperationStatus.Succeed)
             {
                 var text = op.GetRawFileText();
-                op.Release();
                 return text;
             }
             else
@@ -288,12 +284,11 @@ namespace MiniGame.Asset
         
         public static async UniTask<string> LoadTextFileAsync(string path)
         {
-            var op = YooAssets.LoadRawFileAsync(path);
+            using var op = YooAssets.LoadRawFileAsync(path);
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
                 var text = op.GetRawFileText();
-                op.Release();
                 return text;
             }
             else
@@ -306,11 +301,10 @@ namespace MiniGame.Asset
 
         public static GameObject LoadGameObjectSync(string path, Transform transform = null)
         {
-            var op = YooAssets.LoadAssetSync<GameObject>(path);
+            using var op = YooAssets.LoadAssetSync<GameObject>(path);
             if (op.Status == EOperationStatus.Succeed)
             {
                 var go = op.InstantiateSync(transform);
-                op.Release();
                 return go;
             }
             else
@@ -322,12 +316,11 @@ namespace MiniGame.Asset
 
         public static async UniTask<GameObject> LoadGameObjectAsync(string path, Transform transform = null)
         {
-            var op = YooAssets.LoadAssetAsync<GameObject>(path);
+            using var op = YooAssets.LoadAssetAsync<GameObject>(path);
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
                 var go = op.InstantiateSync(transform);
-                op.Release();
                 return go;
             }
             else
@@ -340,7 +333,7 @@ namespace MiniGame.Asset
         public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T>(string path,
             Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
         {
-            var op = YooAssets.LoadAssetAsync<T>(path);
+            using var op = YooAssets.LoadAssetAsync<T>(path);
             await op.ToUniTask();
             if (op.Status == EOperationStatus.Succeed)
             {
