@@ -81,35 +81,34 @@ namespace MiniGame.Editor
         private static void BuildYooAssets(BuildTarget target, EBuildMode buildMode = EBuildMode.ForceRebuild)
         {
             Debug.Log($"开始构建 : {target}");
-
- 			BuildParameters buildParameters = new BuildParameters();
-			buildParameters.StreamingAssetsRoot = AssetBundleBuilderHelper.GetDefaultStreamingAssetsRoot();
-			buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
-			buildParameters.BuildTarget = target;
-			buildParameters.BuildPipeline = AssetBundleBuilderSettingData.Setting.BuildPipeline;
-			buildParameters.BuildMode = buildMode;
-			buildParameters.PackageName = AssetBundleBuilderSettingData.Setting.BuildPackage;
-			buildParameters.PackageVersion = GetBuildPackageVersion();
-			buildParameters.VerifyBuildingResult = true;
-			buildParameters.SharedPackRule = new ZeroRedundancySharedPackRule();
-			// buildParameters.EncryptionServices = CreateEncryptionServicesInstance();
-			buildParameters.CompressOption = AssetBundleBuilderSettingData.Setting.CompressOption;
-			buildParameters.OutputNameStyle = AssetBundleBuilderSettingData.Setting.OutputNameStyle;
-			buildParameters.CopyBuildinFileOption = AssetBundleBuilderSettingData.Setting.CopyBuildinFileOption;
-			buildParameters.CopyBuildinFileTags = AssetBundleBuilderSettingData.Setting.CopyBuildinFileTags;
-
-			if (AssetBundleBuilderSettingData.Setting.BuildPipeline == EBuildPipeline.ScriptableBuildPipeline)
-			{
-				buildParameters.SBPParameters = new BuildParameters.SBPBuildParameters();
-				buildParameters.SBPParameters.WriteLinkXML = true;
-			}
-
-			var builder = new AssetBundleBuilder();
-			var buildResult = builder.Run(buildParameters);
-			if (buildResult.Success)
-			{
-				EditorUtility.RevealInFinder(buildResult.OutputPackageDirectory);
-			}
+ 		// 	BuildParameters buildParameters = new BuildParameters();
+			// buildParameters.StreamingAssetsRoot = AssetBundleBuilderHelper.GetDefaultStreamingAssetsRoot();
+			// buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+			// buildParameters.BuildTarget = target;
+			// buildParameters.BuildPipeline = AssetBundleBuilderSettingData.Setting.BuildPipeline;
+			// buildParameters.BuildMode = buildMode;
+			// buildParameters.PackageName = AssetBundleBuilderSettingData.Setting.BuildPackage;
+			// buildParameters.PackageVersion = GetBuildPackageVersion();
+			// buildParameters.VerifyBuildingResult = true;
+			// buildParameters.SharedPackRule = new ZeroRedundancySharedPackRule();
+			// // buildParameters.EncryptionServices = CreateEncryptionServicesInstance();
+			// buildParameters.CompressOption = AssetBundleBuilderSettingData.Setting.CompressOption;
+			// buildParameters.OutputNameStyle = AssetBundleBuilderSettingData.Setting.OutputNameStyle;
+			// buildParameters.CopyBuildinFileOption = AssetBundleBuilderSettingData.Setting.CopyBuildinFileOption;
+			// buildParameters.CopyBuildinFileTags = AssetBundleBuilderSettingData.Setting.CopyBuildinFileTags;
+			//
+			// if (AssetBundleBuilderSettingData.Setting.BuildPipeline == EBuildPipeline.ScriptableBuildPipeline)
+			// {
+			// 	buildParameters.SBPParameters = new BuildParameters.SBPBuildParameters();
+			// 	buildParameters.SBPParameters.WriteLinkXML = true;
+			// }
+			//
+			// var builder = new AssetBundleBuilder();
+			// var buildResult = builder.Run(buildParameters);
+			// if (buildResult.Success)
+			// {
+			// 	EditorUtility.RevealInFinder(buildResult.OutputPackageDirectory);
+			// }
         }
         
         private static string GetBuildPackageVersion()

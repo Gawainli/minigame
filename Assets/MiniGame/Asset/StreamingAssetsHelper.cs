@@ -19,7 +19,7 @@ namespace MiniGame.Asset
     /// <summary>
     /// 内置文件查询服务类
     /// </summary>
-    public class GameQueryServices : IQueryServices
+    public class GameQueryServices 
     {
         public bool QueryStreamingAssets(string packageName, string fileName)
         {

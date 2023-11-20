@@ -57,13 +57,23 @@ namespace MiniGame.Asset
 
             public Stream LoadFromStream(DecryptFileInfo fileInfo)
             {
-                var bundleStream = new FileStream(fileInfo.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                var bundleStream = new FileStream(fileInfo.FileLoadPath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 return bundleStream;
             }
 
             public uint GetManagedReadBufferSize()
             {
                 return 1024;
+            }
+
+            public AssetBundle LoadAssetBundle(DecryptFileInfo fileInfo, out Stream managedStream)
+            {
+                throw new NotImplementedException();
+            }
+
+            public AssetBundleCreateRequest LoadAssetBundleAsync(DecryptFileInfo fileInfo, out Stream managedStream)
+            {
+                throw new NotImplementedException();
             }
         }
 
@@ -109,7 +119,7 @@ namespace MiniGame.Asset
             if (cfg.ePlayMode == EPlayMode.EditorSimulateMode)
             {
                 var createParameters = new EditorSimulateModeParameters();
-                createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(cfg.packageName);
+                createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, cfg.packageName);
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
@@ -128,7 +138,7 @@ namespace MiniGame.Asset
                 // string fallbackHostServer = GetHostServerURL();
                 var createParameters = new HostPlayModeParameters();
                 createParameters.DecryptionServices = new GameDecryptionServices();
-                createParameters.QueryServices = new GameQueryServices();
+                // createParameters.QueryServices = new GameQueryServices();
                 createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
@@ -330,22 +340,22 @@ namespace MiniGame.Asset
             }
         }
 
-        public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T>(string path,
-            Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
-        {
-            using var op = YooAssets.LoadAssetAsync<T>(path);
-            await op.ToUniTask();
-            if (op.Status == EOperationStatus.Succeed)
-            {
-                callback?.Invoke(op);
-                return op;
-            }
-            else
-            {
-                LogModule.Error($"{op.LastError}");
-                return null;
-            }
-        }
+        // public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T>(string path,
+        //     Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
+        // {
+        //     using var op = YooAssets.LoadAssetAsync<T>(path);
+        //     await op.ToUniTask();
+        //     if (op.Status == EOperationStatus.Succeed)
+        //     {
+        //         callback?.Invoke(op);
+        //         return op;
+        //     }
+        //     else
+        //     {
+        //         LogModule.Error($"{op.LastError}");
+        //         return null;
+        //     }
+        // }
 
         public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path,
             LoadSceneMode loadSceneMode = LoadSceneMode.Single)
