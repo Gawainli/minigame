@@ -1,15 +1,16 @@
 ﻿using MiniGame.Scene;
 using MiniGame.UI;
+using UnityEngine.UI;
 
 public class TestMainWindow : UIWindow
 {
     public override void OnCreate()
     {
-        var btnMemTest = Transform.Find("Panel/BtnMemTest").GetComponent<UnityEngine.UI.Button>();
+        var btnMemTest = this.Q<Button>("Panel/BtnMemTest");
         btnMemTest.onClick.AddListener(OnClickMemTest);
-        var btnLubanTest = Transform.Find("Panel/BtnLubanTest").GetComponent<UnityEngine.UI.Button>();
+        var btnLubanTest = this.Q<Button>("Panel/BtnLubanTest");
         btnLubanTest.onClick.AddListener(OnClickLubanTest);
-        var btnTestProto = Transform.Find("Panel/BtnProtoTest").GetComponent<UnityEngine.UI.Button>();
+        var btnTestProto = this.Q<Button>("Panel/BtnProtoTest");
         btnTestProto.onClick.AddListener(OnClickTestProto);
     }
 

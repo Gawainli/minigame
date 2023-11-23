@@ -173,9 +173,14 @@ namespace MiniGame.UI
             Prepared = true;
         }
         
-        protected Transform Find(string path)
+        protected Transform Q(string path)
         {
             return _uiPanel.transform.Find(path);
+        }
+        
+        protected T Q<T>(string path) where T : Component
+        {
+            return _uiPanel.transform.Find(path).GetComponent<T>();
         }
         
         
