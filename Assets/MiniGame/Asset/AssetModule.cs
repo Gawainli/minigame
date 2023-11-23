@@ -118,28 +118,42 @@ namespace MiniGame.Asset
             InitializationOperation initializationOperation = null;
             if (cfg.ePlayMode == EPlayMode.EditorSimulateMode)
             {
-                var createParameters = new EditorSimulateModeParameters();
-                createParameters.SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, cfg.packageName);
+                var createParameters = new EditorSimulateModeParameters
+                {
+                    SimulateManifestFilePath = EditorSimulateModeHelper.SimulateBuild(EDefaultBuildPipeline.BuiltinBuildPipeline, cfg.packageName)
+                };
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
             // 单机运行模式
             if (cfg.ePlayMode == EPlayMode.OfflinePlayMode)
             {
-                var createParameters = new OfflinePlayModeParameters();
-                createParameters.DecryptionServices = new GameDecryptionServices();
+                var createParameters = new OfflinePlayModeParameters
+                {
+                    DecryptionServices = new GameDecryptionServices()
+                };
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
             // 联机运行模式
             if (cfg.ePlayMode == EPlayMode.HostPlayMode)
             {
-                // string defaultHostServer = GetHostServerURL();
-                // string fallbackHostServer = GetHostServerURL();
-                var createParameters = new HostPlayModeParameters();
-                createParameters.DecryptionServices = new GameDecryptionServices();
-                // createParameters.QueryServices = new GameQueryServices();
-                createParameters.RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer);
+                var createParameters = new HostPlayModeParameters
+                {
+                    DecryptionServices = new GameDecryptionServices(),
+                    // createParameters.QueryServices = new GameQueryServices();
+                    RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer)
+                };
+                initializationOperation = pkg.InitializeAsync(createParameters);
+            }
+
+            if (cfg.ePlayMode == EPlayMode.WebPlayMode)
+            {
+                var createParameters = new WebPlayModeParameters
+                {
+                    DecryptionServices = new GameDecryptionServices(),
+                    RemoteServices = new YooRemoteService(cfg.DefaultHostServer, cfg.DefaultHostServer)
+                };
                 initializationOperation = pkg.InitializeAsync(createParameters);
             }
 
@@ -339,23 +353,6 @@ namespace MiniGame.Asset
                 return null;
             }
         }
-
-        // public static async UniTask<AssetOperationHandle> LoadAssetAsyncOp<T>(string path,
-        //     Action<AssetOperationHandle> callback = null) where T : UnityEngine.Object
-        // {
-        //     using var op = YooAssets.LoadAssetAsync<T>(path);
-        //     await op.ToUniTask();
-        //     if (op.Status == EOperationStatus.Succeed)
-        //     {
-        //         callback?.Invoke(op);
-        //         return op;
-        //     }
-        //     else
-        //     {
-        //         LogModule.Error($"{op.LastError}");
-        //         return null;
-        //     }
-        // }
 
         public static async UniTask<UnityEngine.SceneManagement.Scene> LoadSceneAsync(string path,
             LoadSceneMode loadSceneMode = LoadSceneMode.Single)

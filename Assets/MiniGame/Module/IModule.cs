@@ -14,26 +14,4 @@ namespace MiniGame.Module
         
         bool Initialized { get; set; }
     }
-
-    // public class ModuleSingleton<T> where T : class, IModule
-    // {
-    //     private static T _instance;
-    //     
-    //     public static T Instance
-    //     {
-    //         get
-    //         {
-    //             if (_instance == null)
-    //             {
-    //                 LogModule.Error($"Module is not created. {typeof(T).FullName}");
-    //             }
-    //             return _instance;
-    //         }
-    //     }
-    //
-    //     protected ModuleSingleton()
-    //     {
-    //         _instance = this as T;
-    //     }
-    // }
 }

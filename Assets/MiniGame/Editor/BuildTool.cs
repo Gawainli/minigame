@@ -81,11 +81,12 @@ namespace MiniGame.Editor
         private static void BuildYooAssets(BuildTarget target, EBuildMode buildMode = EBuildMode.ForceRebuild)
         {
             Debug.Log($"开始构建 : {target}");
- 		// 	BuildParameters buildParameters = new BuildParameters();
+ 			BuildParameters buildParameters = new BuiltinBuildParameters();
 			// buildParameters.StreamingAssetsRoot = AssetBundleBuilderHelper.GetDefaultStreamingAssetsRoot();
-			// buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+			buildParameters.BuildOutputRoot = AssetBundleBuilderHelper.GetDefaultBuildOutputRoot();
+			buildParameters.BuildinFileRoot = AssetBundleBuilderHelper.GetStreamingAssetsRoot();
+			// buildParameters.BuildPipeline = AssetBundleBuilderSetting.GetPackageBuildMode(AssetBundleBuilderSettingData.Setting.BuildPackage, BuildPipeline);
 			// buildParameters.BuildTarget = target;
-			// buildParameters.BuildPipeline = AssetBundleBuilderSettingData.Setting.BuildPipeline;
 			// buildParameters.BuildMode = buildMode;
 			// buildParameters.PackageName = AssetBundleBuilderSettingData.Setting.BuildPackage;
 			// buildParameters.PackageVersion = GetBuildPackageVersion();
